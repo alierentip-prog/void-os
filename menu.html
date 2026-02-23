@@ -3,36 +3,20 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>THE VOID | COMMAND CENTER</title>
-    <link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@200;400;600;800&family=JetBrains+Mono:wght@100;400&family=Inter:wght@900&display=swap" rel="stylesheet">
-    
+    <title>THE VOID | PRISM CENTER</title>
+    <link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@200;800&family=JetBrains+Mono:wght@300&display=swap" rel="stylesheet">
     <style>
-        /* --- CSS VARIABLES: SİSTEMİN DNA'SI --- */
         :root {
-            --bg-color: #f8fafc;
-            --text-primary: #0f172a;
-            --text-secondary: #475569;
-            --accent-blue: #3b82f6;
-            --accent-purple: #8b5cf6;
-            --accent-pink: #ec4899;
-            --accent-green: #10b981;
-            --glass-bg: rgba(255, 255, 255, 0.4);
-            --glass-border: rgba(255, 255, 255, 0.7);
-            --card-shadow: 0 20px 40px rgba(0, 0, 0, 0.04);
-            --transition-smooth: all 0.5s cubic-bezier(0.16, 1, 0.3, 1);
+            --bg: #0f172a; /* Derin lacivert/siyah ferahlığı */
+            --card-glass: rgba(255, 255, 255, 0.03);
+            --border-glass: rgba(255, 255, 255, 0.1);
+            --text: #f8fafc;
         }
 
-        /* --- SIFIRLAMA VE TEMEL AYARLAR --- */
-        * {
-            margin: 0;
-            padding: 0;
-            box-sizing: border-box;
-            -webkit-tap-highlight-color: transparent;
-        }
+        * { margin: 0; padding: 0; box-sizing: border-box; }
 
         body {
-            background-color: var(--bg-color);
-            color: var(--text-primary);
+            background-color: var(--bg);
             font-family: 'Plus Jakarta Sans', sans-serif;
             min-height: 100vh;
             overflow-x: hidden;
@@ -41,344 +25,209 @@
             align-items: center;
         }
 
-        /* --- ARKA PLAN: AURORA BLOBS SÜREKLİLİĞİ --- */
-        .aurora-container {
-            position: fixed;
-            top: 0; left: 0;
-            width: 100%; height: 100%;
-            z-index: -1;
-            filter: blur(100px);
-            opacity: 0.6;
+        /* --- RENK PAMUKLARI (AURORA SHIFT) --- */
+        .aurora-env {
+            position: fixed; top: 0; left: 0; width: 100%; height: 100%;
+            z-index: -1; filter: blur(120px); opacity: 0.8;
         }
 
         .blob {
-            position: absolute;
-            border-radius: 50%;
-            animation: move 30s infinite alternate linear;
+            position: absolute; border-radius: 50%;
+            animation: move 20s infinite alternate ease-in-out;
+            mix-blend-mode: screen;
         }
 
-        .b1 { width: 60vw; height: 60vw; background: radial-gradient(circle, #dbeafe, transparent); top: -20%; left: -10%; }
-        .b2 { width: 50vw; height: 50vw; background: radial-gradient(circle, #f5d0fe, transparent); bottom: -10%; right: -10%; animation-delay: -5s; }
-        .b3 { width: 40vw; height: 40vw; background: radial-gradient(circle, #fef3c7, transparent); top: 30%; right: 10%; animation-delay: -10s; }
+        .b1 { width: 50vw; height: 50vw; background: #4facfe; top: -10%; left: -10%; }
+        .b2 { width: 60vw; height: 60vw; background: #7000ff; bottom: -10%; right: -10%; animation-delay: -5s; }
+        .b3 { width: 40vw; height: 40vw; background: #f093fb; top: 20%; right: 20%; animation-delay: -10s; }
+        .b4 { width: 35vw; height: 35vw; background: #00f2fe; bottom: 10%; left: 15%; animation-delay: -15s; }
 
         @keyframes move {
-            0% { transform: translate(0, 0) scale(1) rotate(0deg); }
-            50% { transform: translate(10vw, 5vh) scale(1.1) rotate(180deg); }
-            100% { transform: translate(-5vw, 10vh) scale(1) rotate(360deg); }
+            0% { transform: translate(0, 0) scale(1); }
+            100% { transform: translate(100px, 200px) scale(1.3); }
         }
 
-        /* --- ÜST PANEL (NAVBAR) --- */
-        .header {
-            width: 100%;
-            max-width: 1300px;
-            padding: 40px 20px;
-            display: flex;
-            justify-content: space-between;
-            align-items: flex-end;
+        /* --- HEADER --- */
+        .top-nav {
+            width: 100%; max-width: 1300px; padding: 60px 30px 20px;
+            display: flex; justify-content: space-between; align-items: center;
             z-index: 100;
         }
 
-        .brand-section {
-            display: flex;
-            flex-direction: column;
+        .logo {
+            font-size: 3rem; font-weight: 800; letter-spacing: -3px;
+            background: linear-gradient(to bottom, #fff, #94a3b8);
+            -webkit-background-clip: text; -webkit-text-fill-color: transparent;
         }
 
-        .brand-logo {
-            font-family: 'Inter', sans-serif;
-            font-size: 2.5rem;
-            letter-spacing: -2px;
-            background: linear-gradient(to bottom, #0f172a, #64748b);
-            -webkit-background-clip: text;
-            -webkit-text-fill-color: transparent;
+        /* --- BENTO PRISM GRID --- */
+        .bento-container {
+            width: 95%; max-width: 1300px; padding: 40px 0;
+            display: grid; grid-template-columns: repeat(4, 1fr);
+            grid-template-rows: repeat(2, 320px);
+            gap: 25px; z-index: 10;
         }
 
-        .brand-status {
-            font-family: 'JetBrains Mono', monospace;
-            font-size: 0.65rem;
-            letter-spacing: 5px;
-            text-transform: uppercase;
-            color: var(--accent-purple);
-            margin-top: 5px;
-        }
-
-        .system-time {
-            font-family: 'JetBrains Mono', monospace;
-            font-size: 0.8rem;
-            color: var(--text-secondary);
-        }
-
-        /* --- BENTO GRID MİMARİSİ --- */
-        .grid-wrapper {
-            width: 95%;
-            max-width: 1300px;
-            padding: 20px;
-            display: grid;
-            grid-template-columns: repeat(4, 1fr);
-            grid-template-rows: repeat(3, 240px);
-            gap: 24px;
-            z-index: 10;
-            margin-bottom: 60px;
-        }
-
-        /* --- KART TASARIMI (CORE COMPONENT) --- */
-        .card {
-            background: var(--glass-bg);
-            backdrop-filter: blur(25px) saturate(160%);
-            -webkit-backdrop-filter: blur(25px) saturate(160%);
-            border: 1px solid var(--glass-border);
-            border-radius: 40px;
-            padding: 40px;
+        /* --- KART TASARIMI (THE PRISM) --- */
+        .prism-card {
             position: relative;
+            background: var(--card-glass);
+            backdrop-filter: blur(25px);
+            -webkit-backdrop-filter: blur(25px);
+            border: 1px solid var(--border-glass);
+            border-radius: 40px;
+            padding: 45px;
+            display: flex; flex-direction: column; justify-content: flex-end;
+            text-decoration: none; color: var(--text);
             overflow: hidden;
-            text-decoration: none;
-            color: inherit;
-            display: flex;
-            flex-direction: column;
-            justify-content: flex-end;
-            transition: var(--transition-smooth);
-            animation: cardFadeIn 1s cubic-bezier(0.16, 1, 0.3, 1) both;
+            transition: 0.5s cubic-bezier(0.2, 1, 0.2, 1);
         }
 
-        @keyframes cardFadeIn {
-            from { opacity: 0; transform: translateY(30px); }
-            to { opacity: 1; transform: translateY(0); }
-        }
-
-        .card:hover {
-            transform: translateY(-12px) scale(1.02);
-            background: rgba(255, 255, 255, 0.5);
-            border-color: #fff;
-            box-shadow: 0 40px 80px rgba(0, 0, 0, 0.08);
-        }
-
-        /* Kart İçeriği Detayları */
-        .card-tag {
+        /* Hover'da İmleç Takip Eden Işık (JS ile çalışır) */
+        .card-glow {
             position: absolute;
-            top: 40px;
-            left: 40px;
-            font-family: 'JetBrains Mono', monospace;
-            font-size: 0.7rem;
-            text-transform: uppercase;
-            letter-spacing: 3px;
-            color: var(--text-secondary);
-            opacity: 0.6;
-        }
-
-        .card-icon {
-            position: absolute;
-            top: 40px;
-            right: 40px;
-            width: 45px;
-            height: 45px;
-            background: rgba(0, 0, 0, 0.03);
-            border-radius: 15px;
-            display: flex;
-            justify-content: center;
-            align-items: center;
-            font-size: 1.2rem;
-            transition: var(--transition-smooth);
-        }
-
-        .card:hover .card-icon {
-            transform: rotate(15deg) scale(1.1);
-            background: var(--accent-purple);
-            color: #fff;
-        }
-
-        .card h2 {
-            font-size: 1.8rem;
-            font-weight: 800;
-            letter-spacing: -1px;
-            margin-bottom: 12px;
-        }
-
-        .card p {
-            font-size: 0.95rem;
-            line-height: 1.6;
-            color: var(--text-secondary);
-            font-weight: 400;
-        }
-
-        /* --- KART ÖZELLEŞTİRMELERİ (BENTO LOGIC) --- */
-        
-        /* 1. İç Dünya (Geniş & Dominant) */
-        .card-mind { grid-column: span 2; grid-row: span 2; }
-        .card-mind h2 { font-size: 2.8rem; }
-
-        /* 2. İnsanlar (Dikey Uzun) */
-        .card-social { grid-row: span 2; }
-
-        /* 3. Motivasyon (Yatay Uzun) */
-        .card-will { grid-column: span 2; }
-        
-        /* 4. Köşe Yazısı & Dergi (Standart Kare) */
-        
-        /* Kart Giriş Gecikmeleri (Staggered Animation) */
-        .card:nth-child(1) { animation-delay: 0.1s; }
-        .card:nth-child(2) { animation-delay: 0.2s; }
-        .card:nth-child(3) { animation-delay: 0.3s; }
-        .card:nth-child(4) { animation-delay: 0.4s; }
-        .card:nth-child(5) { animation-delay: 0.5s; }
-
-        /* --- FOOTER UI --- */
-        .footer-info {
-            width: 100%;
-            max-width: 1300px;
-            padding: 40px 20px;
-            display: flex;
-            justify-content: center;
-            gap: 40px;
-            font-family: 'JetBrains Mono', monospace;
-            font-size: 0.65rem;
-            color: var(--text-secondary);
-            text-transform: uppercase;
-            letter-spacing: 2px;
-            opacity: 0.5;
-        }
-
-        /* --- MOBİL UYUMLULUK (RESPONSIVE) --- */
-        @media (max-width: 1100px) {
-            .grid-wrapper {
-                grid-template-columns: repeat(2, 1fr);
-                grid-template-rows: auto;
-            }
-            .card-mind, .card-will, .card-social {
-                grid-column: span 2;
-                grid-row: span 1;
-                min-height: 300px;
-            }
-        }
-
-        @media (max-width: 650px) {
-            .grid-wrapper {
-                grid-template-columns: 1fr;
-                gap: 20px;
-                padding: 10px;
-            }
-            .card {
-                grid-column: span 1 !important;
-                border-radius: 30px;
-                padding: 30px;
-            }
-            .brand-logo { font-size: 2rem; }
-            .header { padding: 30px 20px; }
-            .card h2 { font-size: 1.5rem; }
-        }
-
-        /* --- ÖZEL EFEKT: GRAIN (KUM) --- */
-        body::before {
-            content: "";
-            position: fixed; top: 0; left: 0; width: 100%; height: 100%;
-            background: url('https://grainy-gradients.vercel.app/noise.svg');
-            opacity: 0.03;
+            top: var(--y); left: var(--x);
+            transform: translate(-50%, -50%);
+            width: 500px; height: 500px;
+            background: radial-gradient(circle, var(--glow-color) 0%, transparent 70%);
+            opacity: 0;
+            transition: opacity 0.5s;
             pointer-events: none;
-            z-index: 9999;
         }
 
-        /* --- CUSTOM SCROLLBAR --- */
-        ::-webkit-scrollbar { width: 8px; }
-        ::-webkit-scrollbar-track { background: var(--bg-color); }
-        ::-webkit-scrollbar-thumb { background: #cbd5e1; border-radius: 10px; }
-        ::-webkit-scrollbar-thumb:hover { background: #94a3b8; }
+        .prism-card:hover .card-glow { opacity: 0.15; }
 
+        .prism-card:hover {
+            transform: scale(1.02) translateY(-10px);
+            border-color: var(--glow-color);
+            box-shadow: 0 30px 60px rgba(0,0,0,0.2);
+        }
+
+        /* Kart İçeriği */
+        .prism-card h2 {
+            font-size: 2.2rem; font-weight: 800; margin-bottom: 10px;
+            transition: 0.5s;
+        }
+
+        .prism-card:hover h2 { color: var(--glow-color); }
+
+        .prism-card p {
+            font-size: 1rem; line-height: 1.6; color: rgba(255,255,255,0.6);
+            max-width: 90%;
+        }
+
+        .prism-card .tag {
+            position: absolute; top: 40px; left: 45px;
+            font-family: 'JetBrains Mono', monospace; font-size: 0.7rem;
+            letter-spacing: 4px; opacity: 0.4;
+        }
+
+        /* Bento Düzeni */
+        .wide { grid-column: span 2; }
+        .tall { grid-row: span 2; }
+
+        /* Renk Tanımları */
+        .c-mind { --glow-color: #00f2fe; }
+        .c-social { --glow-color: #ff0080; }
+        .c-will { --glow-color: #7000ff; }
+        .c-edit { --glow-color: #f6e05e; }
+        .c-arc { --glow-color: #00dfd8; }
+
+        /* --- MOBİL --- */
+        @media (max-width: 1000px) {
+            .bento-container { grid-template-columns: repeat(2, 1fr); grid-template-rows: auto; }
+            .wide, .tall { grid-column: span 2; grid-row: span 1; height: 350px; }
+        }
+
+        @media (max-width: 600px) {
+            .bento-container { grid-template-columns: 1fr; }
+            .wide, .tall { grid-column: span 1; }
+            .logo { font-size: 2.2rem; }
+        }
+
+        /* Film Grain Detayı */
+        body::before {
+            content: ""; position: fixed; top: 0; left: 0; width: 100%; height: 100%;
+            background: url('https://grainy-gradients.vercel.app/noise.svg');
+            opacity: 0.05; pointer-events: none; z-index: 1000;
+        }
     </style>
 </head>
 <body>
 
-    <div class="aurora-container">
+    <div class="aurora-env">
         <div class="blob b1"></div>
         <div class="blob b2"></div>
         <div class="blob b3"></div>
+        <div class="blob b4"></div>
     </div>
 
-    <header class="header">
-        <div class="brand-section">
-            <h1 class="brand-logo">TheVoid</h1>
-            <span class="brand-status">Neural Link: Active</span>
+    <header class="top-nav">
+        <h1 class="logo">TheVoid</h1>
+        <div style="font-family: 'JetBrains Mono'; font-size: 0.7rem; letter-spacing: 2px; opacity: 0.6;">
+            [ SYSTEM ACTIVE ]
         </div>
-        <div class="system-time" id="clock">00:00:00</div>
     </header>
 
-    <main class="grid-wrapper">
+    <main class="bento-container">
         
-        <a href="ic-dunya.html" class="card card-mind">
-            <span class="card-tag">0x01 // Zihin</span>
-            <div class="card-icon">🧠</div>
-            <div class="card-content">
-                <h2>İç Dünya</h2>
-                <p>Zihnin hızı, evrenin fiziği ve konuşamadıklarımın dijital dökümü. Burada her kelime bir sinaps, her düşünce bir dalgadır.</p>
-            </div>
+        <a href="ic-dunya.html" class="prism-card wide c-mind">
+            <div class="card-glow"></div>
+            <span class="tag">// CORE_MIND</span>
+            <h2>İç Dünya</h2>
+            <p>Zihnin hızı ve evrenin fiziği arasındaki o ince çizgi. Konuşamadığım her şeyin ham veri dökümü.</p>
         </a>
 
-        <a href="insanlar.html" class="card card-social">
-            <span class="card-tag">0x02 // Gözlem</span>
-            <div class="card-icon">🎭</div>
-            <div class="card-content">
-                <h2>İnsanlar</h2>
-                <p>Sosyal maskelerin anatomisi ve çıkar ilişkileri üzerine sert, dürüst raporlar.</p>
-            </div>
+        <a href="insanlar.html" class="prism-card tall c-social">
+            <div class="card-glow"></div>
+            <span class="tag">// SOCIAL_LAB</span>
+            <h2>İnsanlar</h2>
+            <p>Maske anatomisi ve simülasyon eleştirileri. Çıkar odaklı insan ilişkilerinin dürüst dökümü.</p>
         </a>
 
-        <a href="kose.html" class="card">
-            <span class="card-tag">0x03 // Kalem</span>
-            <div class="card-icon">🖋️</div>
-            <div class="card-content">
-                <h2>Köşe Yazısı</h2>
-                <p>Gürültüden süzülen dürüst hakikatler.</p>
-            </div>
+        <a href="kose.html" class="prism-card c-will">
+            <div class="card-glow"></div>
+            <span class="tag">// EDITORIAL</span>
+            <h2>Köşe Yazısı</h2>
+            <p>Gürültüden arınmış sert gerçekler.</p>
         </a>
 
-        <a href="dergi.html" class="card">
-            <span class="card-tag">0x04 // Arşiv</span>
-            <div class="card-icon">🎸</div>
-            <div class="card-content">
-                <h2>Mecmua</h2>
-                <p>Tıp, Metal ve genel kültürün distorsiyonu.</p>
-            </div>
+        <a href="motivasyon.html" class="prism-card c-edit">
+            <div class="card-glow"></div>
+            <span class="tag">// WILLPOWER</span>
+            <h2>Motivasyon</h2>
+            <p>104'ten 80'e, 30'dan 75'e. Kendini inşa etme sanatı.</p>
         </a>
 
-        <a href="motivasyon.html" class="card card-will">
-            <span class="card-tag">0x05 // İrade</span>
-            <div class="card-icon">⚡</div>
-            <div class="card-content">
-                <h2>Motivasyon</h2>
-                <p>104'ten 80'e, 30'dan 75'e. Kendini yeniden inşa etme sürecinin matematiksel ve ruhsal günlüğü.</p>
+        <a href="dergi.html" class="prism-card wide c-arc">
+            <div class="card-glow"></div>
+            <span class="tag">// THE_ARCHIVE</span>
+            <div style="display: flex; justify-content: space-between; align-items: baseline;">
+                <h2>Mecmua & Kültür</h2>
+                <p style="margin: 0; max-width: 45%;">Tıp, Metal ve genel kültürün distorsiyonlu birleşimi.</p>
             </div>
         </a>
 
     </main>
 
-    <footer class="footer-info">
-        <span>Project: TheVoid v2.0</span>
-        <span>Build: 2026.02.23</span>
-        <span>User: Rafık</span>
-    </footer>
-
     <script>
-        // Saat Güncelleme Fonksiyonu
-        function updateClock() {
-            const now = new Date();
-            const timeStr = now.getHours().toString().padStart(2, '0') + ":" + 
-                            now.getMinutes().toString().padStart(2, '0') + ":" + 
-                            now.getSeconds().toString().padStart(2, '0');
-            document.getElementById('clock').textContent = timeStr;
-        }
-        setInterval(updateClock, 1000);
-        updateClock();
-
-        // Parallax Etkisi: Kartların fareye tepki vermesi
-        document.addEventListener('mousemove', (e) => {
-            const cards = document.querySelectorAll('.card');
-            const x = (window.innerWidth / 2 - e.clientX) / 50;
-            const y = (window.innerHeight / 2 - e.clientY) / 50;
-            
-            // Arka plandaki blobları hafif oynat
-            document.querySelector('.aurora-container').style.transform = `translate(${x}px, ${y}px)`;
+        // İMLEÇ TAKİP EFETKİ (THE PRISM LIGHT)
+        document.querySelectorAll('.prism-card').forEach(card => {
+            card.addEventListener('mousemove', e => {
+                const rect = card.getBoundingClientRect();
+                const x = e.clientX - rect.left;
+                const y = e.clientY - rect.top;
+                
+                card.style.setProperty('--x', `${x}px`);
+                card.style.setProperty('--y', `${y}px`);
+            });
         });
 
-        // Sayfa Giriş Animasyonu İçin Yumuşaklık
-        window.addEventListener('load', () => {
-            document.body.style.opacity = '1';
+        // Arka Plan Hafif Takip
+        document.addEventListener('mousemove', e => {
+            const x = (window.innerWidth / 2 - e.clientX) / 40;
+            const y = (window.innerHeight / 2 - e.clientY) / 40;
+            document.querySelector('.aurora-env').style.transform = `translate(${x}px, ${y}px)`;
         });
     </script>
 </body>
