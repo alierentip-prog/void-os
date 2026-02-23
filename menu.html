@@ -3,145 +3,383 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>TheVoid | Control Panel</title>
+    <title>THE VOID | COMMAND CENTER</title>
+    <link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@200;400;600;800&family=JetBrains+Mono:wght@100;400&family=Inter:wght@900&display=swap" rel="stylesheet">
+    
     <style>
+        /* --- CSS VARIABLES: SİSTEMİN DNA'SI --- */
         :root {
-            --bg: #1a202c;
-            --card-bg: rgba(255, 253, 208, 0.03);
-            --cream: #FFFDD0;
-            --border: rgba(255, 253, 208, 0.1);
+            --bg-color: #f8fafc;
+            --text-primary: #0f172a;
+            --text-secondary: #475569;
+            --accent-blue: #3b82f6;
+            --accent-purple: #8b5cf6;
+            --accent-pink: #ec4899;
+            --accent-green: #10b981;
+            --glass-bg: rgba(255, 255, 255, 0.4);
+            --glass-border: rgba(255, 255, 255, 0.7);
+            --card-shadow: 0 20px 40px rgba(0, 0, 0, 0.04);
+            --transition-smooth: all 0.5s cubic-bezier(0.16, 1, 0.3, 1);
+        }
+
+        /* --- SIFIRLAMA VE TEMEL AYARLAR --- */
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+            -webkit-tap-highlight-color: transparent;
         }
 
         body {
-            margin: 0; background-color: var(--bg);
-            color: var(--cream); font-family: 'Inter', sans-serif;
-            display: flex; flex-direction: column; align-items: center;
-            padding: 50px 20px;
+            background-color: var(--bg-color);
+            color: var(--text-primary);
+            font-family: 'Plus Jakarta Sans', sans-serif;
+            min-height: 100vh;
+            overflow-x: hidden;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
         }
 
-        /* Cam Efektli Şerit Başlık */
-        .header-section {
-            width: 100%; max-width: 1200px; margin-bottom: 60px;
-            position: relative;
-        }
-
-        .header-title {
-            font-size: 5rem; font-weight: 900; letter-spacing: 20px;
-            text-transform: uppercase; margin: 0; opacity: 0.8;
-            background: linear-gradient(180deg, var(--cream) 0%, transparent 100%);
-            -webkit-background-clip: text; -webkit-text-fill-color: transparent;
-        }
-
-        .rainbow-line {
-            height: 2px; width: 100%;
-            background: linear-gradient(90deg, #ff0080, #7928ca, #0070f3, #00dfd8, #f6e05e);
-            position: relative; overflow: hidden;
-        }
-        .rainbow-line::after {
-            content: ''; position: absolute; top: 0; left: -100%;
+        /* --- ARKA PLAN: AURORA BLOBS SÜREKLİLİĞİ --- */
+        .aurora-container {
+            position: fixed;
+            top: 0; left: 0;
             width: 100%; height: 100%;
-            background: linear-gradient(90deg, transparent, rgba(255,255,255,0.8), transparent);
-            animation: scan 3s infinite;
+            z-index: -1;
+            filter: blur(100px);
+            opacity: 0.6;
         }
-        @keyframes scan { to { left: 100%; } }
 
-        /* Grid Sistemi (Complex Layout) */
-        .bento-grid {
+        .blob {
+            position: absolute;
+            border-radius: 50%;
+            animation: move 30s infinite alternate linear;
+        }
+
+        .b1 { width: 60vw; height: 60vw; background: radial-gradient(circle, #dbeafe, transparent); top: -20%; left: -10%; }
+        .b2 { width: 50vw; height: 50vw; background: radial-gradient(circle, #f5d0fe, transparent); bottom: -10%; right: -10%; animation-delay: -5s; }
+        .b3 { width: 40vw; height: 40vw; background: radial-gradient(circle, #fef3c7, transparent); top: 30%; right: 10%; animation-delay: -10s; }
+
+        @keyframes move {
+            0% { transform: translate(0, 0) scale(1) rotate(0deg); }
+            50% { transform: translate(10vw, 5vh) scale(1.1) rotate(180deg); }
+            100% { transform: translate(-5vw, 10vh) scale(1) rotate(360deg); }
+        }
+
+        /* --- ÜST PANEL (NAVBAR) --- */
+        .header {
+            width: 100%;
+            max-width: 1300px;
+            padding: 40px 20px;
+            display: flex;
+            justify-content: space-between;
+            align-items: flex-end;
+            z-index: 100;
+        }
+
+        .brand-section {
+            display: flex;
+            flex-direction: column;
+        }
+
+        .brand-logo {
+            font-family: 'Inter', sans-serif;
+            font-size: 2.5rem;
+            letter-spacing: -2px;
+            background: linear-gradient(to bottom, #0f172a, #64748b);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+        }
+
+        .brand-status {
+            font-family: 'JetBrains Mono', monospace;
+            font-size: 0.65rem;
+            letter-spacing: 5px;
+            text-transform: uppercase;
+            color: var(--accent-purple);
+            margin-top: 5px;
+        }
+
+        .system-time {
+            font-family: 'JetBrains Mono', monospace;
+            font-size: 0.8rem;
+            color: var(--text-secondary);
+        }
+
+        /* --- BENTO GRID MİMARİSİ --- */
+        .grid-wrapper {
+            width: 95%;
+            max-width: 1300px;
+            padding: 20px;
             display: grid;
-            grid-template-columns: repeat(3, 1fr);
-            grid-auto-rows: 240px;
-            gap: 25px; width: 100%; max-width: 1200px;
+            grid-template-columns: repeat(4, 1fr);
+            grid-template-rows: repeat(3, 240px);
+            gap: 24px;
+            z-index: 10;
+            margin-bottom: 60px;
         }
 
-        /* Gelişmiş Kart Tasarımı */
-        .bento-card {
-            background: var(--card-bg);
-            backdrop-filter: blur(20px);
-            border: 1px solid var(--border);
-            border-radius: 30px;
-            padding: 35px;
+        /* --- KART TASARIMI (CORE COMPONENT) --- */
+        .card {
+            background: var(--glass-bg);
+            backdrop-filter: blur(25px) saturate(160%);
+            -webkit-backdrop-filter: blur(25px) saturate(160%);
+            border: 1px solid var(--glass-border);
+            border-radius: 40px;
+            padding: 40px;
             position: relative;
-            transition: 0.5s cubic-bezier(0.2, 1, 0.2, 1);
             overflow: hidden;
-            display: flex; flex-direction: column; justify-content: flex-end;
-            text-decoration: none; color: inherit;
+            text-decoration: none;
+            color: inherit;
+            display: flex;
+            flex-direction: column;
+            justify-content: flex-end;
+            transition: var(--transition-smooth);
+            animation: cardFadeIn 1s cubic-bezier(0.16, 1, 0.3, 1) both;
         }
 
-        /* Kart Boyutlandırma */
-        .large { grid-column: span 2; grid-row: span 2; }
-        .tall { grid-row: span 2; }
-
-        .bento-card:hover {
-            background: rgba(255, 253, 208, 0.08);
-            border-color: rgba(255, 253, 208, 0.4);
-            transform: scale(1.02) translateY(-5px);
-            box-shadow: 0 30px 60px rgba(0,0,0,0.4);
+        @keyframes cardFadeIn {
+            from { opacity: 0; transform: translateY(30px); }
+            to { opacity: 1; transform: translateY(0); }
         }
 
-        /* Kart Detayları: Noktalar ve Semboller */
+        .card:hover {
+            transform: translateY(-12px) scale(1.02);
+            background: rgba(255, 255, 255, 0.5);
+            border-color: #fff;
+            box-shadow: 0 40px 80px rgba(0, 0, 0, 0.08);
+        }
+
+        /* Kart İçeriği Detayları */
         .card-tag {
-            position: absolute; top: 30px; left: 35px;
-            font-family: monospace; font-size: 0.7rem;
-            color: rgba(255,253,208,0.4); letter-spacing: 2px;
+            position: absolute;
+            top: 40px;
+            left: 40px;
+            font-family: 'JetBrains Mono', monospace;
+            font-size: 0.7rem;
+            text-transform: uppercase;
+            letter-spacing: 3px;
+            color: var(--text-secondary);
+            opacity: 0.6;
         }
 
-        .card-dot {
-            position: absolute; top: 35px; right: 35px;
-            width: 10px; height: 10px; border-radius: 50%;
+        .card-icon {
+            position: absolute;
+            top: 40px;
+            right: 40px;
+            width: 45px;
+            height: 45px;
+            background: rgba(0, 0, 0, 0.03);
+            border-radius: 15px;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            font-size: 1.2rem;
+            transition: var(--transition-smooth);
         }
 
-        .bento-card h2 { font-size: 2rem; margin: 0; font-weight: 800; }
-        .bento-card p { font-size: 0.9rem; margin: 15px 0 0; color: rgba(255,253,208,0.6); line-height: 1.6; }
+        .card:hover .card-icon {
+            transform: rotate(15deg) scale(1.1);
+            background: var(--accent-purple);
+            color: #fff;
+        }
 
-        /* Renkler */
-        .c-1 { background: #ff0080; box-shadow: 0 0 15px #ff0080; }
-        .c-2 { background: #00dfd8; box-shadow: 0 0 15px #00dfd8; }
-        .c-3 { background: #7928ca; box-shadow: 0 0 15px #7928ca; }
+        .card h2 {
+            font-size: 1.8rem;
+            font-weight: 800;
+            letter-spacing: -1px;
+            margin-bottom: 12px;
+        }
+
+        .card p {
+            font-size: 0.95rem;
+            line-height: 1.6;
+            color: var(--text-secondary);
+            font-weight: 400;
+        }
+
+        /* --- KART ÖZELLEŞTİRMELERİ (BENTO LOGIC) --- */
+        
+        /* 1. İç Dünya (Geniş & Dominant) */
+        .card-mind { grid-column: span 2; grid-row: span 2; }
+        .card-mind h2 { font-size: 2.8rem; }
+
+        /* 2. İnsanlar (Dikey Uzun) */
+        .card-social { grid-row: span 2; }
+
+        /* 3. Motivasyon (Yatay Uzun) */
+        .card-will { grid-column: span 2; }
+        
+        /* 4. Köşe Yazısı & Dergi (Standart Kare) */
+        
+        /* Kart Giriş Gecikmeleri (Staggered Animation) */
+        .card:nth-child(1) { animation-delay: 0.1s; }
+        .card:nth-child(2) { animation-delay: 0.2s; }
+        .card:nth-child(3) { animation-delay: 0.3s; }
+        .card:nth-child(4) { animation-delay: 0.4s; }
+        .card:nth-child(5) { animation-delay: 0.5s; }
+
+        /* --- FOOTER UI --- */
+        .footer-info {
+            width: 100%;
+            max-width: 1300px;
+            padding: 40px 20px;
+            display: flex;
+            justify-content: center;
+            gap: 40px;
+            font-family: 'JetBrains Mono', monospace;
+            font-size: 0.65rem;
+            color: var(--text-secondary);
+            text-transform: uppercase;
+            letter-spacing: 2px;
+            opacity: 0.5;
+        }
+
+        /* --- MOBİL UYUMLULUK (RESPONSIVE) --- */
+        @media (max-width: 1100px) {
+            .grid-wrapper {
+                grid-template-columns: repeat(2, 1fr);
+                grid-template-rows: auto;
+            }
+            .card-mind, .card-will, .card-social {
+                grid-column: span 2;
+                grid-row: span 1;
+                min-height: 300px;
+            }
+        }
+
+        @media (max-width: 650px) {
+            .grid-wrapper {
+                grid-template-columns: 1fr;
+                gap: 20px;
+                padding: 10px;
+            }
+            .card {
+                grid-column: span 1 !important;
+                border-radius: 30px;
+                padding: 30px;
+            }
+            .brand-logo { font-size: 2rem; }
+            .header { padding: 30px 20px; }
+            .card h2 { font-size: 1.5rem; }
+        }
+
+        /* --- ÖZEL EFEKT: GRAIN (KUM) --- */
+        body::before {
+            content: "";
+            position: fixed; top: 0; left: 0; width: 100%; height: 100%;
+            background: url('https://grainy-gradients.vercel.app/noise.svg');
+            opacity: 0.03;
+            pointer-events: none;
+            z-index: 9999;
+        }
+
+        /* --- CUSTOM SCROLLBAR --- */
+        ::-webkit-scrollbar { width: 8px; }
+        ::-webkit-scrollbar-track { background: var(--bg-color); }
+        ::-webkit-scrollbar-thumb { background: #cbd5e1; border-radius: 10px; }
+        ::-webkit-scrollbar-thumb:hover { background: #94a3b8; }
+
     </style>
 </head>
 <body>
-    <div class="header-section">
-        <h1 class="header-title">TheVoid</h1>
-        <div class="rainbow-line"></div>
+
+    <div class="aurora-container">
+        <div class="blob b1"></div>
+        <div class="blob b2"></div>
+        <div class="blob b3"></div>
     </div>
 
-    <div class="bento-grid">
-        <a href="ic-dunya.html" class="bento-card large">
-            <span class="card-tag">// NEURAL_NET_01</span>
-            <span class="card-dot c-2"></span>
-            <h2>İç Dünya</h2>
-            <p>Zihnin hızı ve evrenin fiziği arasındaki o ince çizgi. Konuşamadıklarımın, tıkanan kelimelerimin ve gece yarısı aydınlanmalarının ham veri merkezi.</p>
-        </a>
+    <header class="header">
+        <div class="brand-section">
+            <h1 class="brand-logo">TheVoid</h1>
+            <span class="brand-status">Neural Link: Active</span>
+        </div>
+        <div class="system-time" id="clock">00:00:00</div>
+    </header>
 
-        <a href="insanlar.html" class="bento-card tall">
-            <span class="card-tag">// SOC_PATHOLOGY</span>
-            <span class="card-dot c-1"></span>
-            <h2>İnsanlar</h2>
-            <p>Maske anatomisi ve simülasyon eleştirileri. Çıkar ilişkilerinin dökümü.</p>
-        </a>
-
-        <a href="kose.html" class="bento-card">
-            <span class="card-tag">// EDITORIAL</span>
-            <span class="card-dot c-3"></span>
-            <h2>Köşe Yazısı</h2>
-            <p>Filtresiz hakikatler.</p>
-        </a>
-
-        <a href="motivasyon.html" class="bento-card">
-            <span class="card-tag">// WILL_POWER</span>
-            <span class="card-dot c-2"></span>
-            <h2>Motivasyon</h2>
-            <p>30 -> 75 / 104 -> 80</p>
-        </a>
-
-        <a href="dergi.html" class="bento-card large" style="grid-column: span 3; grid-row: span 1;">
-            <span class="card-tag">// ARCHIVE_INTEL</span>
-            <span class="card-dot c-3"></span>
-            <div style="display: flex; justify-content: space-between; align-items: baseline;">
-                <h2>Dergi & Kültür</h2>
-                <p style="margin: 0; max-width: 50%;">Tıp, Metal müzik ve genel kültürün distorsiyonlu kesişimi.</p>
+    <main class="grid-wrapper">
+        
+        <a href="ic-dunya.html" class="card card-mind">
+            <span class="card-tag">0x01 // Zihin</span>
+            <div class="card-icon">🧠</div>
+            <div class="card-content">
+                <h2>İç Dünya</h2>
+                <p>Zihnin hızı, evrenin fiziği ve konuşamadıklarımın dijital dökümü. Burada her kelime bir sinaps, her düşünce bir dalgadır.</p>
             </div>
         </a>
-    </div>
+
+        <a href="insanlar.html" class="card card-social">
+            <span class="card-tag">0x02 // Gözlem</span>
+            <div class="card-icon">🎭</div>
+            <div class="card-content">
+                <h2>İnsanlar</h2>
+                <p>Sosyal maskelerin anatomisi ve çıkar ilişkileri üzerine sert, dürüst raporlar.</p>
+            </div>
+        </a>
+
+        <a href="kose.html" class="card">
+            <span class="card-tag">0x03 // Kalem</span>
+            <div class="card-icon">🖋️</div>
+            <div class="card-content">
+                <h2>Köşe Yazısı</h2>
+                <p>Gürültüden süzülen dürüst hakikatler.</p>
+            </div>
+        </a>
+
+        <a href="dergi.html" class="card">
+            <span class="card-tag">0x04 // Arşiv</span>
+            <div class="card-icon">🎸</div>
+            <div class="card-content">
+                <h2>Mecmua</h2>
+                <p>Tıp, Metal ve genel kültürün distorsiyonu.</p>
+            </div>
+        </a>
+
+        <a href="motivasyon.html" class="card card-will">
+            <span class="card-tag">0x05 // İrade</span>
+            <div class="card-icon">⚡</div>
+            <div class="card-content">
+                <h2>Motivasyon</h2>
+                <p>104'ten 80'e, 30'dan 75'e. Kendini yeniden inşa etme sürecinin matematiksel ve ruhsal günlüğü.</p>
+            </div>
+        </a>
+
+    </main>
+
+    <footer class="footer-info">
+        <span>Project: TheVoid v2.0</span>
+        <span>Build: 2026.02.23</span>
+        <span>User: Rafık</span>
+    </footer>
+
+    <script>
+        // Saat Güncelleme Fonksiyonu
+        function updateClock() {
+            const now = new Date();
+            const timeStr = now.getHours().toString().padStart(2, '0') + ":" + 
+                            now.getMinutes().toString().padStart(2, '0') + ":" + 
+                            now.getSeconds().toString().padStart(2, '0');
+            document.getElementById('clock').textContent = timeStr;
+        }
+        setInterval(updateClock, 1000);
+        updateClock();
+
+        // Parallax Etkisi: Kartların fareye tepki vermesi
+        document.addEventListener('mousemove', (e) => {
+            const cards = document.querySelectorAll('.card');
+            const x = (window.innerWidth / 2 - e.clientX) / 50;
+            const y = (window.innerHeight / 2 - e.clientY) / 50;
+            
+            // Arka plandaki blobları hafif oynat
+            document.querySelector('.aurora-container').style.transform = `translate(${x}px, ${y}px)`;
+        });
+
+        // Sayfa Giriş Animasyonu İçin Yumuşaklık
+        window.addEventListener('load', () => {
+            document.body.style.opacity = '1';
+        });
+    </script>
 </body>
 </html>
