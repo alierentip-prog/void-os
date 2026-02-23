@@ -3,178 +3,230 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>THE VOID | SYSTEM CORE</title>
-    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@100;400;900&family=JetBrains+Mono:wght@100&display=swap" rel="stylesheet">
+    <title>THE VOID | EXORDIUM</title>
+    <link href="https://fonts.googleapis.com/css2?family=Space+Grotesk:wght@300;700&family=Inter:wght@900&display=swap" rel="stylesheet">
     <style>
         :root {
-            --bg: #050505;
-            --accent: #00f2ff; /* Electric Cyan */
-            --accent-alt: #7000ff; /* Deep Violet */
-            --text-main: #ffffff;
-            --glass: rgba(255, 255, 255, 0.03);
+            --bg: #e2e8f0;
+            --accent-1: #4facfe;
+            --accent-2: #00f2fe;
+            --accent-3: #7000ff;
+            --glass: rgba(255, 255, 255, 0.4);
+            --text-color: #1a202c;
         }
 
-        * { margin: 0; padding: 0; box-sizing: border-box; }
+        * { margin: 0; padding: 0; box-sizing: border-box; outline: none; }
 
         body {
             background-color: var(--bg);
-            color: var(--text-main);
-            font-family: 'Inter', sans-serif;
+            font-family: 'Space Grotesk', sans-serif;
             height: 100vh;
-            overflow: hidden;
             display: flex;
             justify-content: center;
             align-items: center;
-            perspective: 1000px;
+            overflow: hidden;
+            color: var(--text-color);
         }
 
-        /* --- DYNAMIC BACKGROUND MESH --- */
-        .mesh-bg {
+        /* --- DİNAMİK AURORA ARKA PLAN --- */
+        .aurora-container {
             position: fixed; top: 0; left: 0; width: 100%; height: 100%;
-            background: 
-                radial-gradient(circle at 20% 20%, rgba(0, 242, 255, 0.05) 0%, transparent 40%),
-                radial-gradient(circle at 80% 80%, rgba(112, 0, 255, 0.05) 0%, transparent 40%);
             z-index: -1;
+            background: #f8fafc;
+            overflow: hidden;
+        }
+
+        .blob {
+            position: absolute;
+            width: 600px; height: 600px;
+            background: linear-gradient(135deg, var(--accent-1), var(--accent-3));
             filter: blur(80px);
-        }
-
-        /* --- SCANLINE EFFECT --- */
-        body::after {
-            content: "";
-            position: fixed; top: 0; left: 0; width: 100%; height: 100%;
-            background: linear-gradient(rgba(18, 16, 16, 0) 50%, rgba(0, 0, 0, 0.1) 50%), 
-                        linear-gradient(90deg, rgba(255, 0, 0, 0.02), rgba(0, 255, 0, 0.01), rgba(0, 0, 255, 0.02));
-            background-size: 100% 4px, 3px 100%;
-            z-index: 100;
-            pointer-events: none;
-        }
-
-        /* --- THE CORE (ORB) --- */
-        .core-container {
-            position: relative;
-            width: 300px; height: 300px;
-            display: flex; justify-content: center; align-items: center;
-            animation: float 6s ease-in-out infinite;
-        }
-
-        @keyframes float {
-            0%, 100% { transform: translateY(0) rotateX(0); }
-            50% { transform: translateY(-20px) rotateX(10deg); }
-        }
-
-        .orb {
-            position: relative;
-            width: 220px; height: 220px;
-            background: linear-gradient(135deg, rgba(255,255,255,0.1), rgba(255,255,255,0));
-            backdrop-filter: blur(20px);
             border-radius: 50%;
-            border: 1px solid rgba(255,255,255,0.1);
-            box-shadow: 
-                0 0 80px rgba(0, 242, 255, 0.1),
-                inset 0 0 50px rgba(255,255,255,0.05);
+            opacity: 0.4;
+            animation: move 20s infinite alternate;
+        }
+
+        .blob-2 {
+            top: -100px; right: -100px;
+            background: linear-gradient(135deg, #f093fb, #f5576c);
+            animation-duration: 25s;
+        }
+
+        .blob-3 {
+            bottom: -200px; left: 10%;
+            background: linear-gradient(135deg, #5ee7df, #b490ca);
+            animation-duration: 15s;
+        }
+
+        @keyframes move {
+            0% { transform: translate(0, 0) scale(1); }
+            100% { transform: translate(100px, 200px) scale(1.2); }
+        }
+
+        /* --- SIVIMSI CAM KÜRE (THE CORE) --- */
+        .visual-anchor {
+            position: relative;
+            width: 400px; height: 400px;
             display: flex; justify-content: center; align-items: center;
             z-index: 10;
         }
 
+        /* Sıvı Efekti İçin SVG Filtresi */
+        .liquid-orb {
+            position: absolute;
+            width: 300px; height: 300px;
+            background: var(--glass);
+            backdrop-filter: blur(40px);
+            -webkit-backdrop-filter: blur(40px);
+            border: 1px solid rgba(255, 255, 255, 0.6);
+            border-radius: 30% 70% 70% 30% / 30% 30% 70% 70%;
+            box-shadow: 
+                0 20px 50px rgba(0,0,0,0.1),
+                inset 0 0 40px rgba(255,255,255,0.5);
+            animation: morph 8s ease-in-out infinite;
+            display: flex; justify-content: center; align-items: center;
+        }
+
+        @keyframes morph {
+            0% { border-radius: 30% 70% 70% 30% / 30% 30% 70% 70%; }
+            50% { border-radius: 50% 50% 30% 70% / 50% 60% 40% 50%; }
+            100% { border-radius: 30% 70% 70% 30% / 30% 30% 70% 70%; }
+        }
+
         .void-title {
-            font-size: 2.2rem;
+            font-family: 'Inter', sans-serif;
+            font-size: 3.5rem;
             font-weight: 900;
-            letter-spacing: 12px;
+            letter-spacing: -3px;
             text-transform: uppercase;
-            color: transparent;
-            -webkit-text-stroke: 1px rgba(255,255,255,0.5);
-            animation: glowText 4s ease-in-out infinite;
-            z-index: 11;
+            background: linear-gradient(to bottom, #1a202c, #4a5568);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            z-index: 12;
+            pointer-events: none;
+            filter: drop-shadow(0 10px 10px rgba(0,0,0,0.05));
         }
 
-        @keyframes glowText {
-            0%, 100% { -webkit-text-stroke: 1px rgba(255,255,255,0.3); filter: drop-shadow(0 0 0px var(--accent)); }
-            50% { -webkit-text-stroke: 1px var(--accent); filter: drop-shadow(0 0 15px var(--accent)); color: rgba(255,255,255,0.1); }
-        }
-
-        /* --- ADVANCED ORBITALS --- */
+        /* --- PARLAYAN HALKALAR --- */
         .ring {
             position: absolute;
+            border: 1px solid rgba(255, 255, 255, 0.8);
             border-radius: 50%;
-            border: 1px solid rgba(255,255,255,0.05);
-            animation: rotate 10s linear infinite;
-        }
-        .ring-1 { width: 320px; height: 320px; border-top: 2px solid var(--accent); animation-duration: 3s; }
-        .ring-2 { width: 380px; height: 380px; border-right: 1px solid var(--accent-alt); animation-duration: 8s; animation-direction: reverse; }
-        .ring-3 { width: 440px; height: 440px; border-left: 1px solid rgba(255,255,255,0.1); animation-duration: 15s; }
-
-        @keyframes rotate { from { transform: rotate(0deg); } to { transform: rotate(360deg); } }
-
-        /* --- DATA STREAM (Bottom) --- */
-        .system-logs {
-            position: absolute; bottom: 40px; left: 40px;
-            font-family: 'JetBrains Mono', monospace;
-            font-size: 0.7rem; color: rgba(255,255,255,0.3);
-            letter-spacing: 1px; line-height: 1.5;
+            animation: pulse-ring 4s ease-out infinite;
         }
 
-        /* --- START BUTTON --- */
-        .start-btn {
-            position: absolute; bottom: 40px; right: 40px;
-            padding: 15px 30px;
-            background: transparent;
-            border: 1px solid var(--accent);
-            color: var(--accent);
-            font-family: 'JetBrains Mono', monospace;
-            font-size: 0.8rem;
-            letter-spacing: 4px;
+        @keyframes pulse-ring {
+            0% { transform: scale(0.8); opacity: 0.8; }
+            100% { transform: scale(1.5); opacity: 0; }
+        }
+
+        /* --- İLERİ SEVİYE DATA PANEL --- */
+        .side-info {
+            position: absolute;
+            bottom: 50px; left: 50px;
+            padding: 20px;
+            background: var(--glass);
+            backdrop-filter: blur(10px);
+            border-radius: 15px;
+            border: 1px solid rgba(255,255,255,0.4);
+            font-size: 0.7rem;
+            letter-spacing: 2px;
+            font-family: monospace;
+            box-shadow: 0 10px 30px rgba(0,0,0,0.05);
+        }
+
+        /* --- CEZBEDİCİ BUTON --- */
+        .enter-action {
+            position: absolute;
+            bottom: 50px; right: 50px;
+            z-index: 100;
+        }
+
+        .btn-main {
+            padding: 20px 40px;
+            background: var(--text-color);
+            color: #fff;
+            border: none;
+            border-radius: 50px;
+            font-weight: 700;
+            letter-spacing: 5px;
             text-transform: uppercase;
             cursor: pointer;
-            transition: 0.4s;
-            overflow: hidden;
+            transition: all 0.5s cubic-bezier(0.23, 1, 0.32, 1);
+            box-shadow: 0 20px 40px rgba(0,0,0,0.2);
         }
 
-        .start-btn::before {
-            content: ""; position: absolute; top: 0; left: -100%; width: 100%; height: 100%;
-            background: var(--accent); transition: 0.4s; z-index: -1;
+        .btn-main:hover {
+            transform: translateY(-5px) scale(1.05);
+            box-shadow: 0 30px 60px rgba(0,0,0,0.3);
+            background: var(--accent-3);
         }
 
-        .start-btn:hover { color: var(--bg); box-shadow: 0 0 30px var(--accent); }
-        .start-btn:hover::before { left: 0; }
-
-        /* --- MOBILE ADAPTATION --- */
-        @media (max-width: 768px) {
-            .core-container { transform: scale(0.7); }
-            .system-logs { display: none; }
-            .start-btn { left: 50%; transform: translateX(-50%); width: 200px; text-align: center; }
+        /* --- MOUSE TAKİP PARÇACIKLARI --- */
+        #cursor-glow {
+            position: fixed;
+            width: 400px; height: 400px;
+            background: radial-gradient(circle, rgba(79, 172, 254, 0.15) 0%, transparent 70%);
+            border-radius: 50%;
+            pointer-events: none;
+            z-index: 5;
+            transform: translate(-50%, -50%);
+            transition: 0.1s ease-out;
         }
+
     </style>
 </head>
 <body>
 
-    <div class="mesh-bg"></div>
+    <div id="cursor-glow"></div>
 
-    <div class="core-container">
-        <div class="ring ring-1"></div>
-        <div class="ring ring-2"></div>
-        <div class="ring ring-3"></div>
+    <div class="aurora-container">
+        <div class="blob"></div>
+        <div class="blob blob-2"></div>
+        <div class="blob blob-3"></div>
+    </div>
+
+    <div class="visual-anchor">
+        <div class="ring" style="width: 400px; height: 400px; animation-delay: 0s;"></div>
+        <div class="ring" style="width: 400px; height: 400px; animation-delay: 1s;"></div>
         
-        <div class="orb">
-            <h1 class="void-title">Void</h1>
+        <div class="liquid-orb">
+            <h1 class="void-title">VOID</h1>
         </div>
     </div>
 
-    <div class="system-logs">
-        > NEURAL_LINK: ESTABLISHED<br>
-        > DATA_FLOW: ENCRYPTED<br>
-        > STATUS: WAITING_FOR_INPUT...
+    <div class="side-info">
+        CORE_STATUS: STABLE<br>
+        NEURAL_LOAD: 24%<br>
+        LOCATION: 37.75°N / 38.27°E
     </div>
 
-    <button class="start-btn" onclick="window.location.href='menu.html'">Initialize</button>
+    <div class="enter-action">
+        <button class="btn-main" onclick="startSystem()">Initialize</button>
+    </div>
 
     <script>
-        // İsteğe bağlı: Mouse takibi ile hafif 3D efekti
+        // Mouse Takip Efekti
+        const glow = document.getElementById('cursor-glow');
         document.addEventListener('mousemove', (e) => {
-            const orb = document.querySelector('.core-container');
-            const x = (window.innerWidth / 2 - e.pageX) / 30;
-            const y = (window.innerHeight / 2 - e.pageY) / 30;
-            orb.style.transform = `rotateY(${x}deg) rotateX(${y}deg)`;
+            glow.style.left = e.clientX + 'px';
+            glow.style.top = e.clientY + 'px';
+            
+            // Küreyi hafifçe itme efekti
+            const anchor = document.querySelector('.visual-anchor');
+            const moveX = (window.innerWidth / 2 - e.clientX) / 25;
+            const moveY = (window.innerHeight / 2 - e.clientY) / 25;
+            anchor.style.transform = `rotateY(${moveX}deg) rotateX(${-moveY}deg)`;
         });
-    </script>
+
+        function startSystem() {
+            // Görkemli bir geçiş efekti
+            document.body.style.transition = "2s ease-in-out";
+            document.body.style.filter = "brightness(2) blur(20px)";
+            setTimeout(() => {
+                window.location.href = "menu.html";
+            }, 1000);
+        }
+    </style>
 </body>
-</html>
+    </html>
