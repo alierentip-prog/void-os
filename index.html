@@ -3,126 +3,178 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>TheVoid | System Initializing</title>
-    <meta http-equiv="refresh" content="6;url=menu.html">
+    <title>THE VOID | SYSTEM CORE</title>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@100;400;900&family=JetBrains+Mono:wght@100&display=swap" rel="stylesheet">
     <style>
         :root {
-            --deep-bg: #1a202c; /* Daha derin, profesyonel koyu ton */
-            --slate: #2D3748;
-            --cream: #FFFDD0;
-            --accent: linear-gradient(45deg, #00dbde 0%, #fc00ff 100%);
+            --bg: #050505;
+            --accent: #00f2ff; /* Electric Cyan */
+            --accent-alt: #7000ff; /* Deep Violet */
+            --text-main: #ffffff;
+            --glass: rgba(255, 255, 255, 0.03);
         }
 
-        body, html {
-            margin: 0; padding: 0; height: 100%;
-            background: radial-gradient(circle at center, var(--slate) 0%, var(--deep-bg) 100%);
-            display: flex; justify-content: center; align-items: center;
-            overflow: hidden; font-family: 'Inter', sans-serif;
+        * { margin: 0; padding: 0; box-sizing: border-box; }
+
+        body {
+            background-color: var(--bg);
+            color: var(--text-main);
+            font-family: 'Inter', sans-serif;
+            height: 100vh;
+            overflow: hidden;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            perspective: 1000px;
         }
 
-        /* Arka Plan Hareketli Toz Taneleri (Subtle Animation) */
-        .bg-fx {
-            position: absolute; width: 100%; height: 100%;
-            background: url('https://www.transparenttextures.com/patterns/stardust.png');
-            opacity: 0.2; animation: bgMove 100s linear infinite;
+        /* --- DYNAMIC BACKGROUND MESH --- */
+        .mesh-bg {
+            position: fixed; top: 0; left: 0; width: 100%; height: 100%;
+            background: 
+                radial-gradient(circle at 20% 20%, rgba(0, 242, 255, 0.05) 0%, transparent 40%),
+                radial-gradient(circle at 80% 80%, rgba(112, 0, 255, 0.05) 0%, transparent 40%);
+            z-index: -1;
+            filter: blur(80px);
         }
 
-        @keyframes bgMove { from { background-position: 0 0; } to { background-position: 1000px 1000px; } }
-
-        /* Ana 3D Küre Yapısı */
-        .sphere-wrapper {
-            position: relative; width: 350px; height: 350px;
-            display: flex; justify-content: center; align-items: center;
+        /* --- SCANLINE EFFECT --- */
+        body::after {
+            content: "";
+            position: fixed; top: 0; left: 0; width: 100%; height: 100%;
+            background: linear-gradient(rgba(18, 16, 16, 0) 50%, rgba(0, 0, 0, 0.1) 50%), 
+                        linear-gradient(90deg, rgba(255, 0, 0, 0.02), rgba(0, 255, 0, 0.01), rgba(0, 0, 255, 0.02));
+            background-size: 100% 4px, 3px 100%;
+            z-index: 100;
+            pointer-events: none;
         }
 
-        .main-sphere {
-            width: 100%; height: 100%;
-            background: var(--cream);
-            border-radius: 50%;
+        /* --- THE CORE (ORB) --- */
+        .core-container {
             position: relative;
-            box-shadow: 
-                0 0 100px rgba(0,0,0,0.5),
-                inset -20px -20px 60px rgba(0,0,0,0.1),
-                inset 20px 20px 60px rgba(255,255,255,0.8);
+            width: 300px; height: 300px;
             display: flex; justify-content: center; align-items: center;
-            z-index: 5;
+            animation: float 6s ease-in-out infinite;
         }
 
-        /* "TheVoid" İleri Seviye Yazı Efekti */
-        .void-text {
-            font-size: 3.5rem; font-weight: 900; letter-spacing: -2px;
-            background: linear-gradient(to right, #2D3748, #4A5568, #2D3748);
-            background-size: 200% auto;
-            -webkit-background-clip: text;
-            -webkit-text-fill-color: transparent;
-            animation: shimmer 4s linear infinite;
+        @keyframes float {
+            0%, 100% { transform: translateY(0) rotateX(0); }
+            50% { transform: translateY(-20px) rotateX(10deg); }
         }
 
-        @keyframes shimmer { to { background-position: 200% center; } }
-
-        /* Loading Çemberi (İç ve Dış Çift Katman) */
-        .orbit {
-            position: absolute; border-radius: 50%;
-            border: 2px solid transparent;
-            border-top-color: #ff0080;
-            animation: rotate 2s linear infinite;
+        .orb {
+            position: relative;
+            width: 220px; height: 220px;
+            background: linear-gradient(135deg, rgba(255,255,255,0.1), rgba(255,255,255,0));
+            backdrop-filter: blur(20px);
+            border-radius: 50%;
+            border: 1px solid rgba(255,255,255,0.1);
+            box-shadow: 
+                0 0 80px rgba(0, 242, 255, 0.1),
+                inset 0 0 50px rgba(255,255,255,0.05);
+            display: flex; justify-content: center; align-items: center;
+            z-index: 10;
         }
-        .orbit.outer { width: 380px; height: 380px; border-bottom-color: #00dfd8; animation-duration: 4s; }
-        .orbit.inner { width: 360px; height: 360px; border-right-color: #f6e05e; animation-duration: 2s; animation-direction: reverse; }
 
-        /* Renk Değiştiren Loading Noktaları (Matematiksel Dizilim) */
-        .dot-container {
-            position: absolute; width: 330px; height: 330px;
+        .void-title {
+            font-size: 2.2rem;
+            font-weight: 900;
+            letter-spacing: 12px;
+            text-transform: uppercase;
+            color: transparent;
+            -webkit-text-stroke: 1px rgba(255,255,255,0.5);
+            animation: glowText 4s ease-in-out infinite;
+            z-index: 11;
+        }
+
+        @keyframes glowText {
+            0%, 100% { -webkit-text-stroke: 1px rgba(255,255,255,0.3); filter: drop-shadow(0 0 0px var(--accent)); }
+            50% { -webkit-text-stroke: 1px var(--accent); filter: drop-shadow(0 0 15px var(--accent)); color: rgba(255,255,255,0.1); }
+        }
+
+        /* --- ADVANCED ORBITALS --- */
+        .ring {
+            position: absolute;
+            border-radius: 50%;
+            border: 1px solid rgba(255,255,255,0.05);
             animation: rotate 10s linear infinite;
         }
-        .dot {
-            position: absolute; width: 12px; height: 12px; border-radius: 50%;
-            background: var(--accent);
-            box-shadow: 0 0 15px var(--accent);
-            offset-path: path('M 165,165 m -165,0 a 165,165 0 1,0 330,0 a 165,165 0 1,0 -330,0');
-            animation: follow 4s linear infinite;
-        }
-        .dot:nth-child(2) { animation-delay: -1s; }
-        .dot:nth-child(3) { animation-delay: -2s; }
+        .ring-1 { width: 320px; height: 320px; border-top: 2px solid var(--accent); animation-duration: 3s; }
+        .ring-2 { width: 380px; height: 380px; border-right: 1px solid var(--accent-alt); animation-duration: 8s; animation-direction: reverse; }
+        .ring-3 { width: 440px; height: 440px; border-left: 1px solid rgba(255,255,255,0.1); animation-duration: 15s; }
 
         @keyframes rotate { from { transform: rotate(0deg); } to { transform: rotate(360deg); } }
-        @keyframes follow { from { offset-distance: 0%; } to { offset-distance: 100%; } }
 
-        /* Üstteki Renk Cümbüşü Çizgiler (Glassmorphism Sidebar) */
-        .status-bar {
-            position: absolute; top: 40px; right: 40px;
-            display: flex; flex-direction: column; gap: 6px;
+        /* --- DATA STREAM (Bottom) --- */
+        .system-logs {
+            position: absolute; bottom: 40px; left: 40px;
+            font-family: 'JetBrains Mono', monospace;
+            font-size: 0.7rem; color: rgba(255,255,255,0.3);
+            letter-spacing: 1px; line-height: 1.5;
         }
-        .bar {
-            height: 4px; border-radius: 2px;
-            background: var(--accent);
-            animation: barFlow 2s ease-in-out infinite alternate;
-        }
-        .bar:nth-child(1) { width: 60px; }
-        .bar:nth-child(2) { width: 40px; animation-delay: 0.3s; }
-        .bar:nth-child(3) { width: 50px; animation-delay: 0.6s; }
 
-        @keyframes barFlow { from { opacity: 0.3; transform: translateX(10px); } to { opacity: 1; transform: translateX(0); } }
+        /* --- START BUTTON --- */
+        .start-btn {
+            position: absolute; bottom: 40px; right: 40px;
+            padding: 15px 30px;
+            background: transparent;
+            border: 1px solid var(--accent);
+            color: var(--accent);
+            font-family: 'JetBrains Mono', monospace;
+            font-size: 0.8rem;
+            letter-spacing: 4px;
+            text-transform: uppercase;
+            cursor: pointer;
+            transition: 0.4s;
+            overflow: hidden;
+        }
+
+        .start-btn::before {
+            content: ""; position: absolute; top: 0; left: -100%; width: 100%; height: 100%;
+            background: var(--accent); transition: 0.4s; z-index: -1;
+        }
+
+        .start-btn:hover { color: var(--bg); box-shadow: 0 0 30px var(--accent); }
+        .start-btn:hover::before { left: 0; }
+
+        /* --- MOBILE ADAPTATION --- */
+        @media (max-width: 768px) {
+            .core-container { transform: scale(0.7); }
+            .system-logs { display: none; }
+            .start-btn { left: 50%; transform: translateX(-50%); width: 200px; text-align: center; }
+        }
     </style>
 </head>
 <body>
-    <div class="bg-fx"></div>
-    <div class="status-bar">
-        <div class="bar"></div>
-        <div class="bar"></div>
-        <div class="bar"></div>
-    </div>
-    <div class="sphere-wrapper">
-        <div class="orbit outer"></div>
-        <div class="orbit inner"></div>
-        <div class="main-sphere">
-            <div class="void-text">TheVoid</div>
-        </div>
-        <div class="dot-container">
-            <div class="dot"></div>
-            <div class="dot"></div>
-            <div class="dot"></div>
+
+    <div class="mesh-bg"></div>
+
+    <div class="core-container">
+        <div class="ring ring-1"></div>
+        <div class="ring ring-2"></div>
+        <div class="ring ring-3"></div>
+        
+        <div class="orb">
+            <h1 class="void-title">Void</h1>
         </div>
     </div>
+
+    <div class="system-logs">
+        > NEURAL_LINK: ESTABLISHED<br>
+        > DATA_FLOW: ENCRYPTED<br>
+        > STATUS: WAITING_FOR_INPUT...
+    </div>
+
+    <button class="start-btn" onclick="window.location.href='menu.html'">Initialize</button>
+
+    <script>
+        // İsteğe bağlı: Mouse takibi ile hafif 3D efekti
+        document.addEventListener('mousemove', (e) => {
+            const orb = document.querySelector('.core-container');
+            const x = (window.innerWidth / 2 - e.pageX) / 30;
+            const y = (window.innerHeight / 2 - e.pageY) / 30;
+            orb.style.transform = `rotateY(${x}deg) rotateX(${y}deg)`;
+        });
+    </script>
 </body>
 </html>
