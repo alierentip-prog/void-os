@@ -3,230 +3,210 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>THE VOID | EXORDIUM</title>
-    <link href="https://fonts.googleapis.com/css2?family=Space+Grotesk:wght@300;700&family=Inter:wght@900&display=swap" rel="stylesheet">
+    <title>THE VOID | APEX</title>
+    <meta http-equiv="refresh" content="5;url=menu.html">
+    <link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@200;800&family=JetBrains+Mono:wght@100&display=swap" rel="stylesheet">
     <style>
         :root {
-            --bg: #e2e8f0;
-            --accent-1: #4facfe;
-            --accent-2: #00f2fe;
-            --accent-3: #7000ff;
-            --glass: rgba(255, 255, 255, 0.4);
-            --text-color: #1a202c;
+            --bg: #f0f2f5;
+            --glass: rgba(255, 255, 255, 0.7);
+            --accent: #4f46e5;
+            --text: #0f172a;
         }
 
-        * { margin: 0; padding: 0; box-sizing: border-box; outline: none; }
+        * { margin: 0; padding: 0; box-sizing: border-box; }
 
         body {
             background-color: var(--bg);
-            font-family: 'Space Grotesk', sans-serif;
+            font-family: 'Plus Jakarta Sans', sans-serif;
             height: 100vh;
             display: flex;
             justify-content: center;
             align-items: center;
             overflow: hidden;
-            color: var(--text-color);
+            perspective: 2000px;
         }
 
-        /* --- DİNAMİK AURORA ARKA PLAN --- */
-        .aurora-container {
+        /* --- ATMOSFERİK ARKA PLAN --- */
+        .universe {
             position: fixed; top: 0; left: 0; width: 100%; height: 100%;
+            background: 
+                radial-gradient(circle at 10% 10%, #dbeafe 0%, transparent 50%),
+                radial-gradient(circle at 90% 90%, #fef3c7 0%, transparent 50%),
+                radial-gradient(circle at 50% 50%, #ede9fe 0%, transparent 100%);
             z-index: -1;
-            background: #f8fafc;
-            overflow: hidden;
+            filter: contrast(1.2) brightness(1.1);
         }
 
-        .blob {
-            position: absolute;
-            width: 600px; height: 600px;
-            background: linear-gradient(135deg, var(--accent-1), var(--accent-3));
-            filter: blur(80px);
-            border-radius: 50%;
-            opacity: 0.4;
-            animation: move 20s infinite alternate;
-        }
-
-        .blob-2 {
-            top: -100px; right: -100px;
-            background: linear-gradient(135deg, #f093fb, #f5576c);
-            animation-duration: 25s;
-        }
-
-        .blob-3 {
-            bottom: -200px; left: 10%;
-            background: linear-gradient(135deg, #5ee7df, #b490ca);
-            animation-duration: 15s;
-        }
-
-        @keyframes move {
-            0% { transform: translate(0, 0) scale(1); }
-            100% { transform: translate(100px, 200px) scale(1.2); }
-        }
-
-        /* --- SIVIMSI CAM KÜRE (THE CORE) --- */
-        .visual-anchor {
+        /* --- THE MONOLITH (KRİSTAL MERKEZ) --- */
+        .stage {
             position: relative;
-            width: 400px; height: 400px;
+            width: 500px; height: 500px;
             display: flex; justify-content: center; align-items: center;
-            z-index: 10;
+            transform-style: preserve-3d;
         }
 
-        /* Sıvı Efekti İçin SVG Filtresi */
-        .liquid-orb {
-            position: absolute;
-            width: 300px; height: 300px;
+        .crystal-core {
+            position: relative;
+            width: 280px; height: 400px;
             background: var(--glass);
-            backdrop-filter: blur(40px);
-            -webkit-backdrop-filter: blur(40px);
-            border: 1px solid rgba(255, 255, 255, 0.6);
-            border-radius: 30% 70% 70% 30% / 30% 30% 70% 70%;
+            backdrop-filter: blur(50px) saturate(200%);
+            -webkit-backdrop-filter: blur(50px) saturate(200%);
+            border: 1px solid rgba(255, 255, 255, 0.8);
+            border-radius: 40px;
+            display: flex; flex-direction: column; justify-content: center; align-items: center;
             box-shadow: 
-                0 20px 50px rgba(0,0,0,0.1),
-                inset 0 0 40px rgba(255,255,255,0.5);
-            animation: morph 8s ease-in-out infinite;
-            display: flex; justify-content: center; align-items: center;
+                0 40px 100px rgba(0,0,0,0.05),
+                inset 0 0 80px rgba(255,255,255,0.4);
+            z-index: 10;
+            animation: float 6s ease-in-out infinite;
         }
 
-        @keyframes morph {
-            0% { border-radius: 30% 70% 70% 30% / 30% 30% 70% 70%; }
-            50% { border-radius: 50% 50% 30% 70% / 50% 60% 40% 50%; }
-            100% { border-radius: 30% 70% 70% 30% / 30% 30% 70% 70%; }
+        @keyframes float {
+            0%, 100% { transform: translateZ(50px) translateY(0) rotateY(0deg); }
+            50% { transform: translateZ(100px) translateY(-20px) rotateY(5deg); }
+        }
+
+        .title-wrap {
+            text-align: center;
+            pointer-events: none;
         }
 
         .void-title {
-            font-family: 'Inter', sans-serif;
-            font-size: 3.5rem;
-            font-weight: 900;
-            letter-spacing: -3px;
-            text-transform: uppercase;
-            background: linear-gradient(to bottom, #1a202c, #4a5568);
+            font-size: 4.5rem;
+            font-weight: 800;
+            letter-spacing: -4px;
+            background: linear-gradient(180deg, #0f172a 30%, #64748b);
             -webkit-background-clip: text;
             -webkit-text-fill-color: transparent;
-            z-index: 12;
-            pointer-events: none;
-            filter: drop-shadow(0 10px 10px rgba(0,0,0,0.05));
+            margin-bottom: 10px;
         }
 
-        /* --- PARLAYAN HALKALAR --- */
-        .ring {
+        /* --- PROGRESS RING (5 SANİYE SAYACI) --- */
+        .countdown-ring {
             position: absolute;
-            border: 1px solid rgba(255, 255, 255, 0.8);
+            width: 450px; height: 450px;
             border-radius: 50%;
-            animation: pulse-ring 4s ease-out infinite;
+            border: 1px solid rgba(79, 70, 229, 0.1);
+            display: flex; justify-content: center; align-items: center;
         }
 
-        @keyframes pulse-ring {
-            0% { transform: scale(0.8); opacity: 0.8; }
-            100% { transform: scale(1.5); opacity: 0; }
-        }
-
-        /* --- İLERİ SEVİYE DATA PANEL --- */
-        .side-info {
+        .ring-fill {
             position: absolute;
-            bottom: 50px; left: 50px;
-            padding: 20px;
-            background: var(--glass);
-            backdrop-filter: blur(10px);
-            border-radius: 15px;
-            border: 1px solid rgba(255,255,255,0.4);
-            font-size: 0.7rem;
-            letter-spacing: 2px;
-            font-family: monospace;
-            box-shadow: 0 10px 30px rgba(0,0,0,0.05);
+            width: 100%; height: 100%;
+            border-radius: 50%;
+            border: 2px solid var(--accent);
+            clip-path: inset(0 0 100% 0);
+            animation: fillRing 5s linear forwards;
+            filter: drop-shadow(0 0 10px var(--accent));
         }
 
-        /* --- CEZBEDİCİ BUTON --- */
-        .enter-action {
-            position: absolute;
-            bottom: 50px; right: 50px;
-            z-index: 100;
+        @keyframes fillRing {
+            to { clip-path: inset(0 0 0 0); }
         }
 
-        .btn-main {
-            padding: 20px 40px;
-            background: var(--text-color);
-            color: #fff;
-            border: none;
-            border-radius: 50px;
-            font-weight: 700;
-            letter-spacing: 5px;
+        /* --- SİSTEM DETAYLARI (UI ELEMENTS) --- */
+        .system-status {
+            position: absolute; bottom: 40px;
+            font-family: 'JetBrains Mono', monospace;
+            font-size: 0.6rem;
+            letter-spacing: 4px;
+            color: var(--accent);
             text-transform: uppercase;
-            cursor: pointer;
-            transition: all 0.5s cubic-bezier(0.23, 1, 0.32, 1);
-            box-shadow: 0 20px 40px rgba(0,0,0,0.2);
         }
 
-        .btn-main:hover {
-            transform: translateY(-5px) scale(1.05);
-            box-shadow: 0 30px 60px rgba(0,0,0,0.3);
-            background: var(--accent-3);
+        .metadata {
+            position: absolute; top: 60px; right: 60px;
+            text-align: right; font-family: 'JetBrains Mono', monospace;
+            font-size: 0.7rem; color: #94a3b8;
         }
 
-        /* --- MOUSE TAKİP PARÇACIKLARI --- */
-        #cursor-glow {
-            position: fixed;
-            width: 400px; height: 400px;
-            background: radial-gradient(circle, rgba(79, 172, 254, 0.15) 0%, transparent 70%);
-            border-radius: 50%;
-            pointer-events: none;
-            z-index: 5;
-            transform: translate(-50%, -50%);
-            transition: 0.1s ease-out;
+        /* --- MOUSE PARTICLE LAYER --- */
+        #canvas {
+            position: fixed; top: 0; left: 0; pointer-events: none; z-index: 5;
         }
 
     </style>
 </head>
 <body>
 
-    <div id="cursor-glow"></div>
+    <div class="universe"></div>
+    <canvas id="canvas"></canvas>
 
-    <div class="aurora-container">
-        <div class="blob"></div>
-        <div class="blob blob-2"></div>
-        <div class="blob blob-3"></div>
+    <div class="metadata">
+        SYSTEM_VER: 2.0.26<br>
+        BUFFER: OPTIMIZED<br>
+        STATUS: REDIRECTING...
     </div>
 
-    <div class="visual-anchor">
-        <div class="ring" style="width: 400px; height: 400px; animation-delay: 0s;"></div>
-        <div class="ring" style="width: 400px; height: 400px; animation-delay: 1s;"></div>
+    <div class="stage">
+        <div class="countdown-ring">
+            <div class="ring-fill"></div>
+        </div>
         
-        <div class="liquid-orb">
-            <h1 class="void-title">VOID</h1>
+        <div class="crystal-core">
+            <div class="title-wrap">
+                <h1 class="void-title">VOID</h1>
+                <p style="letter-spacing: 10px; font-weight: 200; opacity: 0.5;">ARCHIVE</p>
+            </div>
+            <div class="system-status">Synchronizing...</div>
         </div>
     </div>
 
-    <div class="side-info">
-        CORE_STATUS: STABLE<br>
-        NEURAL_LOAD: 24%<br>
-        LOCATION: 37.75°N / 38.27°E
-    </div>
-
-    <div class="enter-action">
-        <button class="btn-main" onclick="startSystem()">Initialize</button>
-    </div>
-
     <script>
-        // Mouse Takip Efekti
-        const glow = document.getElementById('cursor-glow');
+        // Mouse Takibi ve 3D Perspective Etkisi
+        const stage = document.querySelector('.stage');
         document.addEventListener('mousemove', (e) => {
-            glow.style.left = e.clientX + 'px';
-            glow.style.top = e.clientY + 'px';
-            
-            // Küreyi hafifçe itme efekti
-            const anchor = document.querySelector('.visual-anchor');
-            const moveX = (window.innerWidth / 2 - e.clientX) / 25;
-            const moveY = (window.innerHeight / 2 - e.clientY) / 25;
-            anchor.style.transform = `rotateY(${moveX}deg) rotateX(${-moveY}deg)`;
+            let x = (window.innerWidth / 2 - e.clientX) / 20;
+            let y = (window.innerHeight / 2 - e.clientY) / 20;
+            stage.style.transform = `rotateY(${x}deg) rotateX(${-y}deg)`;
         });
 
-        function startSystem() {
-            // Görkemli bir geçiş efekti
-            document.body.style.transition = "2s ease-in-out";
-            document.body.style.filter = "brightness(2) blur(20px)";
-            setTimeout(() => {
-                window.location.href = "menu.html";
-            }, 1000);
+        // Arka Plan Işık Takibi
+        const universe = document.querySelector('.universe');
+        document.addEventListener('mousemove', (e) => {
+            let xPerc = (e.clientX / window.innerWidth) * 100;
+            let yPerc = (e.clientY / window.innerHeight) * 100;
+            universe.style.background = `radial-gradient(circle at ${xPerc}% ${yPerc}%, #ede9fe 0%, #f0f2f5 100%)`;
+        });
+
+        // Canvas Basit Partikül Efekti (Zirve Detay)
+        const canvas = document.getElementById('canvas');
+        const ctx = canvas.getContext('2d');
+        canvas.width = window.innerWidth;
+        canvas.height = window.innerHeight;
+        let particles = [];
+
+        class Particle {
+            constructor() {
+                this.x = Math.random() * canvas.width;
+                this.y = Math.random() * canvas.height;
+                this.size = Math.random() * 2;
+                this.speedX = Math.random() * 0.5 - 0.25;
+                this.speedY = Math.random() * 0.5 - 0.25;
+            }
+            update() {
+                this.x += this.speedX;
+                this.y += this.speedY;
+            }
+            draw() {
+                ctx.fillStyle = 'rgba(79, 70, 229, 0.2)';
+                ctx.beginPath();
+                ctx.arc(this.x, this.y, this.size, 0, Math.PI * 2);
+                ctx.fill();
+            }
         }
-    </style>
+
+        function init() {
+            for (let i = 0; i < 100; i++) particles.push(new Particle());
+        }
+
+        function animate() {
+            ctx.clearRect(0, 0, canvas.width, canvas.height);
+            particles.forEach(p => { p.update(); p.draw(); });
+            requestAnimationFrame(animate);
+        }
+        init(); animate();
+    </script>
 </body>
-    </html>
+</html>
