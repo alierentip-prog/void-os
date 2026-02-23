@@ -3,20 +3,34 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>THE VOID | PRISM CENTER</title>
-    <link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@200;800&family=JetBrains+Mono:wght@300&display=swap" rel="stylesheet">
+    <title>THE VOID | APEX COMMAND CENTER</title>
+    <link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@200;400;600;800&family=JetBrains+Mono:wght@100;400&family=Inter:wght@900&display=swap" rel="stylesheet">
+    
     <style>
+        /* --- CSS VARIABLES: RENK CENNETİ DNA --- */
         :root {
-            --bg: #0f172a; /* Derin lacivert/siyah ferahlığı */
-            --card-glass: rgba(255, 255, 255, 0.03);
-            --border-glass: rgba(255, 255, 255, 0.1);
-            --text: #f8fafc;
+            --bg-deep: #080a0f;
+            --accent-cyan: #00f2ff;
+            --accent-purple: #7000ff;
+            --accent-pink: #ff0080;
+            --accent-lime: #00ff88;
+            --accent-gold: #f6e05e;
+            --glass-v1: rgba(255, 255, 255, 0.03);
+            --glass-v2: rgba(255, 255, 255, 0.08);
+            --border-light: rgba(255, 255, 255, 0.15);
+            --text-main: #f8fafc;
+            --transition-main: all 0.6s cubic-bezier(0.23, 1, 0.32, 1);
         }
 
-        * { margin: 0; padding: 0; box-sizing: border-box; }
+        /* --- GLOBAL RESET & SMOOTHING --- */
+        * {
+            margin: 0; padding: 0; box-sizing: border-box;
+            outline: none; -webkit-font-smoothing: antialiased;
+        }
 
         body {
-            background-color: var(--bg);
+            background-color: var(--bg-deep);
+            color: var(--text-main);
             font-family: 'Plus Jakarta Sans', sans-serif;
             min-height: 100vh;
             overflow-x: hidden;
@@ -25,210 +39,358 @@
             align-items: center;
         }
 
-        /* --- RENK PAMUKLARI (AURORA SHIFT) --- */
-        .aurora-env {
+        /* --- CANVAS: UÇAN TOZLAR VE PARTİKÜLLER --- */
+        #particle-canvas {
             position: fixed; top: 0; left: 0; width: 100%; height: 100%;
-            z-index: -1; filter: blur(120px); opacity: 0.8;
+            z-index: 1; pointer-events: none;
         }
 
-        .blob {
+        /* --- RENK PAMUKLARI (NEBULA FLOW) --- */
+        .aurora-sky {
+            position: fixed; top: 0; left: 0; width: 100%; height: 100%;
+            z-index: 0; filter: blur(120px); opacity: 0.9;
+        }
+
+        .nebula {
             position: absolute; border-radius: 50%;
-            animation: move 20s infinite alternate ease-in-out;
+            animation: nebulaMove 35s infinite alternate ease-in-out;
             mix-blend-mode: screen;
         }
 
-        .b1 { width: 50vw; height: 50vw; background: #4facfe; top: -10%; left: -10%; }
-        .b2 { width: 60vw; height: 60vw; background: #7000ff; bottom: -10%; right: -10%; animation-delay: -5s; }
-        .b3 { width: 40vw; height: 40vw; background: #f093fb; top: 20%; right: 20%; animation-delay: -10s; }
-        .b4 { width: 35vw; height: 35vw; background: #00f2fe; bottom: 10%; left: 15%; animation-delay: -15s; }
+        .n1 { width: 80vw; height: 80vw; background: radial-gradient(circle, var(--accent-cyan), transparent); top: -20%; left: -10%; }
+        .n2 { width: 70vw; height: 70vw; background: radial-gradient(circle, var(--accent-purple), transparent); bottom: -10%; right: -10%; animation-delay: -7s; }
+        .n3 { width: 60vw; height: 60vw; background: radial-gradient(circle, var(--accent-pink), transparent); top: 20%; right: 20%; animation-delay: -14s; }
+        .n4 { width: 50vw; height: 50vw; background: radial-gradient(circle, var(--accent-lime), transparent); bottom: 10%; left: 10%; animation-delay: -21s; }
 
-        @keyframes move {
-            0% { transform: translate(0, 0) scale(1); }
-            100% { transform: translate(100px, 200px) scale(1.3); }
+        @keyframes nebulaMove {
+            0% { transform: translate(0, 0) scale(1) rotate(0deg); }
+            50% { transform: translate(150px, 100px) scale(1.3) rotate(180deg); }
+            100% { transform: translate(-100px, -50px) scale(0.9) rotate(360deg); }
         }
 
-        /* --- HEADER --- */
-        .top-nav {
-            width: 100%; max-width: 1300px; padding: 60px 30px 20px;
+        /* --- ÜST ANA ŞERİT (DYNAMIC STATUS BAR) --- */
+        .top-strip-container {
+            width: 100%; position: sticky; top: 0; z-index: 1000;
+            background: rgba(8, 10, 15, 0.4);
+            backdrop-filter: blur(20px);
+            border-bottom: 1px solid var(--border-light);
+        }
+
+        .top-strip-content {
+            max-width: 1400px; margin: 0 auto; padding: 20px 40px;
             display: flex; justify-content: space-between; align-items: center;
-            z-index: 100;
         }
 
-        .logo {
-            font-size: 3rem; font-weight: 800; letter-spacing: -3px;
-            background: linear-gradient(to bottom, #fff, #94a3b8);
-            -webkit-background-clip: text; -webkit-text-fill-color: transparent;
+        .strip-brand {
+            display: flex; align-items: center; gap: 20px;
         }
 
-        /* --- BENTO PRISM GRID --- */
-        .bento-container {
-            width: 95%; max-width: 1300px; padding: 40px 0;
-            display: grid; grid-template-columns: repeat(4, 1fr);
-            grid-template-rows: repeat(2, 320px);
-            gap: 25px; z-index: 10;
+        .brand-hex {
+            width: 40px; height: 40px;
+            background: var(--accent-cyan);
+            clip-path: polygon(25% 0%, 75% 0%, 100% 50%, 75% 100%, 25% 100%, 0% 50%);
+            animation: hexPulse 3s infinite alternate;
         }
 
-        /* --- KART TASARIMI (THE PRISM) --- */
-        .prism-card {
-            position: relative;
-            background: var(--card-glass);
-            backdrop-filter: blur(25px);
-            -webkit-backdrop-filter: blur(25px);
-            border: 1px solid var(--border-glass);
-            border-radius: 40px;
-            padding: 45px;
-            display: flex; flex-direction: column; justify-content: flex-end;
-            text-decoration: none; color: var(--text);
+        @keyframes hexPulse {
+            from { transform: scale(1); filter: drop-shadow(0 0 5px var(--accent-cyan)); }
+            to { transform: scale(1.1); filter: drop-shadow(0 0 20px var(--accent-cyan)); }
+        }
+
+        .brand-text {
+            font-family: 'Inter', sans-serif; font-size: 1.8rem; font-weight: 900;
+            letter-spacing: -1px; text-transform: uppercase;
+        }
+
+        .neon-line-container {
+            position: absolute; bottom: -1px; left: 0; width: 100%; height: 2px;
             overflow: hidden;
-            transition: 0.5s cubic-bezier(0.2, 1, 0.2, 1);
         }
 
-        /* Hover'da İmleç Takip Eden Işık (JS ile çalışır) */
-        .card-glow {
-            position: absolute;
-            top: var(--y); left: var(--x);
+        .neon-line {
+            width: 100%; height: 100%;
+            background: linear-gradient(90deg, transparent, var(--accent-cyan), var(--accent-purple), var(--accent-pink), transparent);
+            background-size: 200% 100%;
+            animation: neonFlow 3s linear infinite;
+        }
+
+        @keyframes neonFlow { to { background-position: 200% center; } }
+
+        /* --- BENTO GRID: TASARIMIN KALBİ --- */
+        .main-dashboard {
+            width: 95%; max-width: 1400px; margin-top: 60px;
+            display: grid; grid-template-columns: repeat(4, 1fr);
+            grid-template-rows: repeat(3, 260px);
+            gap: 30px; z-index: 10; margin-bottom: 100px;
+            perspective: 2000px;
+        }
+
+        /* --- KART TASARIMI (ULTRA-DETAYLI) --- */
+        .apex-card {
+            position: relative;
+            background: var(--glass-v1);
+            backdrop-filter: blur(30px) saturate(200%);
+            -webkit-backdrop-filter: blur(30px) saturate(200%);
+            border: 1px solid var(--border-light);
+            border-radius: 45px;
+            padding: 50px;
+            display: flex; flex-direction: column; justify-content: flex-end;
+            text-decoration: none; color: inherit;
+            transition: var(--transition-main);
+            overflow: hidden;
+            transform-style: preserve-3d;
+        }
+
+        /* Kart İçindeki Uçan Semboller */
+        .floating-symbol {
+            position: absolute; top: 30px; right: 30px;
+            font-family: 'JetBrains Mono', monospace; font-size: 3rem;
+            opacity: 0.1; transition: var(--transition-main);
+        }
+
+        /* Işık Kaynağı (Cursor Tracking) */
+        .card-light {
+            position: absolute; top: var(--y); left: var(--x);
             transform: translate(-50%, -50%);
-            width: 500px; height: 500px;
+            width: 600px; height: 600px;
             background: radial-gradient(circle, var(--glow-color) 0%, transparent 70%);
-            opacity: 0;
-            transition: opacity 0.5s;
-            pointer-events: none;
+            opacity: 0; transition: opacity 0.5s; pointer-events: none;
         }
 
-        .prism-card:hover .card-glow { opacity: 0.15; }
+        .apex-card:hover .card-light { opacity: 0.25; }
 
-        .prism-card:hover {
-            transform: scale(1.02) translateY(-10px);
+        .apex-card:hover {
+            transform: translateY(-15px) rotateX(8deg) rotateY(-5deg);
             border-color: var(--glow-color);
-            box-shadow: 0 30px 60px rgba(0,0,0,0.2);
+            background: rgba(255, 255, 255, 0.05);
+            box-shadow: 0 40px 100px rgba(0,0,0,0.4);
         }
 
-        /* Kart İçeriği */
-        .prism-card h2 {
-            font-size: 2.2rem; font-weight: 800; margin-bottom: 10px;
-            transition: 0.5s;
+        .apex-card:hover .floating-symbol {
+            opacity: 0.8; transform: translateZ(50px) scale(1.2); color: var(--glow-color);
+            text-shadow: 0 0 20px var(--glow-color);
         }
 
-        .prism-card:hover h2 { color: var(--glow-color); }
-
-        .prism-card p {
-            font-size: 1rem; line-height: 1.6; color: rgba(255,255,255,0.6);
-            max-width: 90%;
-        }
-
-        .prism-card .tag {
-            position: absolute; top: 40px; left: 45px;
+        /* Yazı Detayları */
+        .card-meta {
             font-family: 'JetBrains Mono', monospace; font-size: 0.7rem;
-            letter-spacing: 4px; opacity: 0.4;
+            letter-spacing: 5px; text-transform: uppercase;
+            color: var(--glow-color); margin-bottom: 15px;
+            display: flex; align-items: center; gap: 10px;
         }
 
-        /* Bento Düzeni */
-        .wide { grid-column: span 2; }
-        .tall { grid-row: span 2; }
+        .meta-dot {
+            width: 8px; height: 8px; border-radius: 50%;
+            background: var(--glow-color); box-shadow: 0 0 10px var(--glow-color);
+            animation: pulse 1s infinite alternate;
+        }
 
-        /* Renk Tanımları */
-        .c-mind { --glow-color: #00f2fe; }
-        .c-social { --glow-color: #ff0080; }
-        .c-will { --glow-color: #7000ff; }
-        .c-edit { --glow-color: #f6e05e; }
-        .c-arc { --glow-color: #00dfd8; }
+        @keyframes pulse { from { opacity: 0.4; } to { opacity: 1; } }
 
-        /* --- MOBİL --- */
-        @media (max-width: 1000px) {
-            .bento-container { grid-template-columns: repeat(2, 1fr); grid-template-rows: auto; }
-            .wide, .tall { grid-column: span 2; grid-row: span 1; height: 350px; }
+        .apex-card h2 {
+            font-size: 2.2rem; font-weight: 800; letter-spacing: -2px; margin-bottom: 15px;
+            transition: 0.4s;
+        }
+
+        .apex-card p {
+            font-size: 0.95rem; line-height: 1.7; color: rgba(255,255,255,0.6);
+            font-weight: 300; transition: 0.4s;
+        }
+
+        .apex-card:hover p { color: #fff; }
+
+        /* Bento Düzeni Mantığı */
+        .span-2 { grid-column: span 2; }
+        .row-2 { grid-row: span 2; }
+
+        /* Kart Renk Paleti */
+        .c-mind { --glow-color: var(--accent-cyan); }
+        .c-social { --glow-color: var(--accent-pink); }
+        .c-edit { --glow-color: var(--accent-purple); }
+        .c-will { --glow-color: var(--accent-lime); }
+        .c-arc { --glow-color: var(--accent-gold); }
+
+        /* --- FOOTER: SYSTEM LOGS --- */
+        .system-logs {
+            width: 100%; max-width: 1400px; padding: 40px;
+            display: flex; justify-content: space-between;
+            font-family: 'JetBrains Mono', monospace; font-size: 0.7rem;
+            color: rgba(255,255,255,0.3); letter-spacing: 2px;
+        }
+
+        /* --- MOBİL UYUMLULUK --- */
+        @media (max-width: 1200px) {
+            .main-dashboard { grid-template-columns: repeat(2, 1fr); grid-template-rows: auto; }
+            .span-2, .row-2 { grid-column: span 2; grid-row: span 1; min-height: 350px; }
         }
 
         @media (max-width: 600px) {
-            .bento-container { grid-template-columns: 1fr; }
-            .wide, .tall { grid-column: span 1; }
-            .logo { font-size: 2.2rem; }
+            .main-dashboard { grid-template-columns: 1fr; }
+            .span-2, .row-2 { grid-column: span 1; }
+            .top-strip-content { padding: 15px 20px; }
+            .brand-text { font-size: 1.2rem; }
         }
 
-        /* Film Grain Detayı */
+        /* Texture: Film Grain */
         body::before {
             content: ""; position: fixed; top: 0; left: 0; width: 100%; height: 100%;
             background: url('https://grainy-gradients.vercel.app/noise.svg');
-            opacity: 0.05; pointer-events: none; z-index: 1000;
+            opacity: 0.05; pointer-events: none; z-index: 10000;
         }
+
     </style>
 </head>
 <body>
 
-    <div class="aurora-env">
-        <div class="blob b1"></div>
-        <div class="blob b2"></div>
-        <div class="blob b3"></div>
-        <div class="blob b4"></div>
+    <div class="aurora-sky">
+        <div class="nebula n1"></div>
+        <div class="nebula n2"></div>
+        <div class="nebula n3"></div>
+        <div class="nebula n4"></div>
     </div>
 
-    <header class="top-nav">
-        <h1 class="logo">TheVoid</h1>
-        <div style="font-family: 'JetBrains Mono'; font-size: 0.7rem; letter-spacing: 2px; opacity: 0.6;">
-            [ SYSTEM ACTIVE ]
+    <canvas id="particle-canvas"></canvas>
+
+    <nav class="top-strip-container">
+        <div class="top-strip-content">
+            <div class="strip-brand">
+                <div class="brand-hex"></div>
+                <h1 class="brand-text">THEVOID</h1>
+            </div>
+            <div style="font-family: 'JetBrains Mono'; font-size: 0.75rem; letter-spacing: 2px; color: var(--accent-cyan);">
+                STATUS: OPTIMIZED_CORE_2.0
+            </div>
         </div>
-    </header>
+        <div class="neon-line-container">
+            <div class="neon-line"></div>
+        </div>
+    </nav>
 
-    <main class="bento-container">
+    <main class="main-dashboard">
         
-        <a href="ic-dunya.html" class="prism-card wide c-mind">
-            <div class="card-glow"></div>
-            <span class="tag">// CORE_MIND</span>
+        <a href="ic-dunya.html" class="apex-card span-2 row-2 c-mind">
+            <div class="card-light"></div>
+            <div class="floating-symbol">01</div>
+            <div class="card-meta">
+                <div class="meta-dot"></div>
+                NEURAL_LINK_ESTABLISHED
+            </div>
             <h2>İç Dünya</h2>
-            <p>Zihnin hızı ve evrenin fiziği arasındaki o ince çizgi. Konuşamadığım her şeyin ham veri dökümü.</p>
+            <p>Zihnin saniyedeki düşünce hızı ile evrenin sessiz fiziği arasındaki o devasa boşluk. Konuşamadıklarımın, tıkanan kelimelerimin ve gece yarısı aydınlanmalarının ham veri merkezi. Burada her düşünce bir dalga boyudur.</p>
         </a>
 
-        <a href="insanlar.html" class="prism-card tall c-social">
-            <div class="card-glow"></div>
-            <span class="tag">// SOCIAL_LAB</span>
+        <a href="insanlar.html" class="apex-card row-2 c-social">
+            <div class="card-light"></div>
+            <div class="floating-symbol">02</div>
+            <div class="card-meta">
+                <div class="meta-dot"></div>
+                SOCIAL_PATHOLOGY
+            </div>
             <h2>İnsanlar</h2>
-            <p>Maske anatomisi ve simülasyon eleştirileri. Çıkar odaklı insan ilişkilerinin dürüst dökümü.</p>
+            <p>Maske anatomisi, çıkar odaklı simülasyonlar ve toplumsal deşifreler üzerine filtresiz gözlemler. İnsan taklidinin bittiği yer.</p>
         </a>
 
-        <a href="kose.html" class="prism-card c-will">
-            <div class="card-glow"></div>
-            <span class="tag">// EDITORIAL</span>
+        <a href="kose.html" class="apex-card c-edit">
+            <div class="card-light"></div>
+            <div class="floating-symbol">03</div>
+            <div class="card-meta">
+                <div class="meta-dot"></div>
+                EDITORIAL_VIBE
+            </div>
             <h2>Köşe Yazısı</h2>
-            <p>Gürültüden arınmış sert gerçekler.</p>
+            <p>Gürültüden süzülen dürüst hakikatler ve sert sistem eleştirileri.</p>
         </a>
 
-        <a href="motivasyon.html" class="prism-card c-edit">
-            <div class="card-glow"></div>
-            <span class="tag">// WILLPOWER</span>
+        <a href="motivasyon.html" class="apex-card c-will">
+            <div class="card-light"></div>
+            <div class="floating-symbol">04</div>
+            <div class="card-meta">
+                <div class="meta-dot"></div>
+                WILLPOWER_CORE
+            </div>
             <h2>Motivasyon</h2>
-            <p>104'ten 80'e, 30'dan 75'e. Kendini inşa etme sanatı.</p>
+            <p>104'ten 80'e, 30'dan 75'e. İradenin mutlak zaferi.</p>
         </a>
 
-        <a href="dergi.html" class="prism-card wide c-arc">
-            <div class="card-glow"></div>
-            <span class="tag">// THE_ARCHIVE</span>
-            <div style="display: flex; justify-content: space-between; align-items: baseline;">
-                <h2>Mecmua & Kültür</h2>
-                <p style="margin: 0; max-width: 45%;">Tıp, Metal ve genel kültürün distorsiyonlu birleşimi.</p>
+        <a href="dergi.html" class="apex-card span-2 c-arc">
+            <div class="card-light"></div>
+            <div class="floating-symbol">05</div>
+            <div class="card-meta">
+                <div class="meta-dot"></div>
+                ARCHIVE_SYNC
+            </div>
+            <div style="display: flex; justify-content: space-between; align-items: flex-end;">
+                <div>
+                    <h2>Mecmua & Kültür</h2>
+                    <p>Tıp, Metal ve genel kültürün distorsiyonlu birleşimi.</p>
+                </div>
+                <div style="font-family: 'JetBrains Mono'; opacity: 0.2; font-size: 0.8rem;">[ LOADING_GENRE: METAL ]</div>
             </div>
         </a>
 
     </main>
 
+    <footer class="system-logs">
+        <div>COORDINATES: 37.75°N / 38.27°E</div>
+        <div>SESSION_TIME: <span id="uptime">0s</span></div>
+        <div>BUILD: RAFİK_APEX_V4</div>
+    </footer>
+
     <script>
-        // İMLEÇ TAKİP EFETKİ (THE PRISM LIGHT)
-        document.querySelectorAll('.prism-card').forEach(card => {
+        // --- PARTİKÜL MOTORU (UÇAN TOZLAR) ---
+        const canvas = document.getElementById('particle-canvas');
+        const ctx = canvas.getContext('2d');
+        let particles = [];
+
+        function initParticles() {
+            canvas.width = window.innerWidth;
+            canvas.height = window.innerHeight;
+            particles = [];
+            for(let i=0; i<80; i++) {
+                particles.push({
+                    x: Math.random() * canvas.width,
+                    y: Math.random() * canvas.height,
+                    size: Math.random() * 2,
+                    speedX: Math.random() * 0.5 - 0.25,
+                    speedY: Math.random() * 0.5 - 0.25,
+                    opacity: Math.random()
+                });
+            }
+        }
+
+        function drawParticles() {
+            ctx.clearRect(0, 0, canvas.width, canvas.height);
+            particles.forEach(p => {
+                p.x += p.speedX; p.y += p.speedY;
+                if(p.x < 0 || p.x > canvas.width) p.speedX *= -1;
+                if(p.y < 0 || p.y > canvas.height) p.speedY *= -1;
+                ctx.fillStyle = `rgba(255, 255, 255, ${p.opacity})`;
+                ctx.beginPath();
+                ctx.arc(p.x, p.y, p.size, 0, Math.PI*2);
+                ctx.fill();
+            });
+            requestAnimationFrame(drawParticles);
+        }
+        initParticles(); drawParticles();
+
+        // --- İMLEÇ TAKİP VE KART AYDINLATMA ---
+        document.querySelectorAll('.apex-card').forEach(card => {
             card.addEventListener('mousemove', e => {
                 const rect = card.getBoundingClientRect();
                 const x = e.clientX - rect.left;
                 const y = e.clientY - rect.top;
-                
                 card.style.setProperty('--x', `${x}px`);
                 card.style.setProperty('--y', `${y}px`);
             });
         });
 
-        // Arka Plan Hafif Takip
-        document.addEventListener('mousemove', e => {
-            const x = (window.innerWidth / 2 - e.clientX) / 40;
-            const y = (window.innerHeight / 2 - e.clientY) / 40;
-            document.querySelector('.aurora-env').style.transform = `translate(${x}px, ${y}px)`;
-        });
+        // Uptime sayacı
+        let start = Date.now();
+        setInterval(() => {
+            document.getElementById('uptime').textContent = Math.floor((Date.now() - start)/1000) + 's';
+        }, 1000);
+
+        window.addEventListener('resize', initParticles);
     </script>
 </body>
-</html>
+    </html>
