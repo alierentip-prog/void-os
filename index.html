@@ -3,15 +3,17 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>THE VOID | APEX</title>
+    <title>THE VOID | AURORA CORE</title>
     <meta http-equiv="refresh" content="5;url=menu.html">
     <link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@200;800&family=JetBrains+Mono:wght@100&display=swap" rel="stylesheet">
     <style>
         :root {
-            --bg: #f0f2f5;
-            --glass: rgba(255, 255, 255, 0.7);
-            --accent: #4f46e5;
+            --bg: #f5f7fa;
             --text: #0f172a;
+            --accent-1: #4facfe;
+            --accent-2: #00f2fe;
+            --accent-3: #7000ff;
+            --accent-4: #f093fb;
         }
 
         * { margin: 0; padding: 0; box-sizing: border-box; }
@@ -20,193 +22,190 @@
             background-color: var(--bg);
             font-family: 'Plus Jakarta Sans', sans-serif;
             height: 100vh;
+            width: 100vw;
             display: flex;
             justify-content: center;
             align-items: center;
             overflow: hidden;
-            perspective: 2000px;
-        }
-
-        /* --- ATMOSFERİK ARKA PLAN --- */
-        .universe {
-            position: fixed; top: 0; left: 0; width: 100%; height: 100%;
-            background: 
-                radial-gradient(circle at 10% 10%, #dbeafe 0%, transparent 50%),
-                radial-gradient(circle at 90% 90%, #fef3c7 0%, transparent 50%),
-                radial-gradient(circle at 50% 50%, #ede9fe 0%, transparent 100%);
-            z-index: -1;
-            filter: contrast(1.2) brightness(1.1);
-        }
-
-        /* --- THE MONOLITH (KRİSTAL MERKEZ) --- */
-        .stage {
             position: relative;
+        }
+
+        /* --- RENK PAMUKLARI (AURORA BLOBS) --- */
+        .aurora-wrapper {
+            position: fixed;
+            top: 0; left: 0;
+            width: 100%; height: 100%;
+            z-index: 1;
+            filter: blur(100px); /* Pamuksu yumuşaklık için */
+            opacity: 0.7;
+        }
+
+        .blob {
+            position: absolute;
+            border-radius: 50%;
+            animation: move 25s infinite alternate;
+        }
+
+        .blob-1 {
             width: 500px; height: 500px;
-            display: flex; justify-content: center; align-items: center;
-            transform-style: preserve-3d;
+            background: var(--accent-1);
+            top: -100px; left: -100px;
+            animation-duration: 30s;
         }
 
-        .crystal-core {
+        .blob-2 {
+            width: 600px; height: 600px;
+            background: var(--accent-3);
+            bottom: -200px; right: -100px;
+            animation-delay: -5s;
+        }
+
+        .blob-3 {
+            width: 450px; height: 450px;
+            background: var(--accent-4);
+            top: 20%; right: 10%;
+            animation-duration: 20s;
+        }
+
+        .blob-4 {
+            width: 400px; height: 400px;
+            background: var(--accent-2);
+            bottom: 10%; left: 20%;
+            animation-delay: -10s;
+        }
+
+        @keyframes move {
+            0% { transform: translate(0, 0) scale(1) rotate(0deg); }
+            33% { transform: translate(150px, 100px) scale(1.2) rotate(120deg); }
+            66% { transform: translate(-100px, 200px) scale(0.8) rotate(240deg); }
+            100% { transform: translate(0, 0) scale(1) rotate(360deg); }
+        }
+
+        /* --- MERKEZİ KRİSTAL KART --- */
+        .glass-container {
             position: relative;
-            width: 280px; height: 400px;
-            background: var(--glass);
-            backdrop-filter: blur(50px) saturate(200%);
-            -webkit-backdrop-filter: blur(50px) saturate(200%);
-            border: 1px solid rgba(255, 255, 255, 0.8);
-            border-radius: 40px;
-            display: flex; flex-direction: column; justify-content: center; align-items: center;
-            box-shadow: 
-                0 40px 100px rgba(0,0,0,0.05),
-                inset 0 0 80px rgba(255,255,255,0.4);
             z-index: 10;
-            animation: float 6s ease-in-out infinite;
-        }
-
-        @keyframes float {
-            0%, 100% { transform: translateZ(50px) translateY(0) rotateY(0deg); }
-            50% { transform: translateZ(100px) translateY(-20px) rotateY(5deg); }
-        }
-
-        .title-wrap {
+            width: 85%;
+            max-width: 400px;
+            padding: 60px 20px;
+            background: rgba(255, 255, 255, 0.3);
+            backdrop-filter: blur(30px) saturate(180%);
+            -webkit-backdrop-filter: blur(30px) saturate(180%);
+            border: 1px solid rgba(255, 255, 255, 0.5);
+            border-radius: 50px;
             text-align: center;
-            pointer-events: none;
+            box-shadow: 0 25px 50px rgba(0,0,0,0.05);
+            animation: cardAppear 1.2s cubic-bezier(0.16, 1, 0.3, 1);
+        }
+
+        @keyframes cardAppear {
+            from { opacity: 0; transform: scale(0.8) translateY(50px); }
+            to { opacity: 1; transform: scale(1) translateY(0); }
         }
 
         .void-title {
-            font-size: 4.5rem;
+            font-size: 3.5rem;
             font-weight: 800;
-            letter-spacing: -4px;
-            background: linear-gradient(180deg, #0f172a 30%, #64748b);
+            letter-spacing: -2px;
+            color: var(--text);
+            margin-bottom: 5px;
+            background: linear-gradient(to bottom, #0f172a, #475569);
             -webkit-background-clip: text;
             -webkit-text-fill-color: transparent;
-            margin-bottom: 10px;
         }
 
-        /* --- PROGRESS RING (5 SANİYE SAYACI) --- */
-        .countdown-ring {
+        .sub-text {
+            font-size: 0.7rem;
+            letter-spacing: 8px;
+            text-transform: uppercase;
+            color: var(--accent-3);
+            font-weight: 600;
+            margin-bottom: 30px;
+        }
+
+        /* --- PROGRESS BAR (5 SANİYE) --- */
+        .loader-bar {
+            width: 60px;
+            height: 4px;
+            background: rgba(0,0,0,0.1);
+            margin: 0 auto;
+            border-radius: 10px;
+            overflow: hidden;
+        }
+
+        .loader-progress {
+            width: 100%;
+            height: 100%;
+            background: var(--accent-3);
+            transform: scaleX(0);
+            transform-origin: left;
+            animation: load 5s linear forwards;
+        }
+
+        @keyframes load {
+            to { transform: scaleX(1); }
+        }
+
+        /* --- UI DETAYLARI --- */
+        .info-label {
             position: absolute;
-            width: 450px; height: 450px;
-            border-radius: 50%;
-            border: 1px solid rgba(79, 70, 229, 0.1);
-            display: flex; justify-content: center; align-items: center;
-        }
-
-        .ring-fill {
-            position: absolute;
-            width: 100%; height: 100%;
-            border-radius: 50%;
-            border: 2px solid var(--accent);
-            clip-path: inset(0 0 100% 0);
-            animation: fillRing 5s linear forwards;
-            filter: drop-shadow(0 0 10px var(--accent));
-        }
-
-        @keyframes fillRing {
-            to { clip-path: inset(0 0 0 0); }
-        }
-
-        /* --- SİSTEM DETAYLARI (UI ELEMENTS) --- */
-        .system-status {
-            position: absolute; bottom: 40px;
+            bottom: 30px;
+            width: 100%;
+            left: 0;
             font-family: 'JetBrains Mono', monospace;
             font-size: 0.6rem;
-            letter-spacing: 4px;
-            color: var(--accent);
+            color: rgba(0,0,0,0.4);
             text-transform: uppercase;
         }
 
-        .metadata {
-            position: absolute; top: 60px; right: 60px;
-            text-align: right; font-family: 'JetBrains Mono', monospace;
-            font-size: 0.7rem; color: #94a3b8;
+        /* --- MOBİL AYARLAR --- */
+        @media (max-width: 480px) {
+            .void-title { font-size: 2.8rem; }
+            .aurora-wrapper { opacity: 0.9; }
+            .blob { width: 300px; height: 300px; }
         }
-
-        /* --- MOUSE PARTICLE LAYER --- */
-        #canvas {
-            position: fixed; top: 0; left: 0; pointer-events: none; z-index: 5;
-        }
-
     </style>
 </head>
 <body>
 
-    <div class="universe"></div>
-    <canvas id="canvas"></canvas>
-
-    <div class="metadata">
-        SYSTEM_VER: 2.0.26<br>
-        BUFFER: OPTIMIZED<br>
-        STATUS: REDIRECTING...
+    <div class="aurora-wrapper">
+        <div class="blob blob-1"></div>
+        <div class="blob blob-2"></div>
+        <div class="blob blob-3"></div>
+        <div class="blob blob-4"></div>
     </div>
 
-    <div class="stage">
-        <div class="countdown-ring">
-            <div class="ring-fill"></div>
-        </div>
+    <div class="glass-container">
+        <h1 class="void-title">VOID</h1>
+        <p class="sub-text">Experience</p>
         
-        <div class="crystal-core">
-            <div class="title-wrap">
-                <h1 class="void-title">VOID</h1>
-                <p style="letter-spacing: 10px; font-weight: 200; opacity: 0.5;">ARCHIVE</p>
-            </div>
-            <div class="system-status">Synchronizing...</div>
+        <div class="loader-bar">
+            <div class="loader-progress"></div>
         </div>
+
+        <div class="info-label">Initializing Neural Link...</div>
     </div>
 
     <script>
-        // Mouse Takibi ve 3D Perspective Etkisi
-        const stage = document.querySelector('.stage');
+        // Parallax Etkisi: Mouse hareketiyle renkleri hafifçe oynat
         document.addEventListener('mousemove', (e) => {
-            let x = (window.innerWidth / 2 - e.clientX) / 20;
-            let y = (window.innerHeight / 2 - e.clientY) / 20;
-            stage.style.transform = `rotateY(${x}deg) rotateX(${-y}deg)`;
+            const moveX = (e.clientX - window.innerWidth / 2) * 0.05;
+            const moveY = (e.clientY - window.innerHeight / 2) * 0.05;
+            document.querySelector('.aurora-wrapper').style.transform = `translate(${moveX}px, ${moveY}px)`;
+            
+            // Kartı da hafifçe salla
+            const card = document.querySelector('.glass-container');
+            const rotX = (window.innerHeight / 2 - e.clientY) / 25;
+            const rotY = (e.clientX - window.innerWidth / 2) / 25;
+            card.style.transform = `rotateX(${rotX}deg) rotateY(${rotY}deg)`;
         });
 
-        // Arka Plan Işık Takibi
-        const universe = document.querySelector('.universe');
-        document.addEventListener('mousemove', (e) => {
-            let xPerc = (e.clientX / window.innerWidth) * 100;
-            let yPerc = (e.clientY / window.innerHeight) * 100;
-            universe.style.background = `radial-gradient(circle at ${xPerc}% ${yPerc}%, #ede9fe 0%, #f0f2f5 100%)`;
+        // Jiroskop Etkisi (Mobil İçin)
+        window.addEventListener('deviceorientation', (e) => {
+            const moveX = e.gamma * 2;
+            const moveY = e.beta * 2;
+            document.querySelector('.aurora-wrapper').style.transform = `translate(${moveX}px, ${moveY}px)`;
         });
-
-        // Canvas Basit Partikül Efekti (Zirve Detay)
-        const canvas = document.getElementById('canvas');
-        const ctx = canvas.getContext('2d');
-        canvas.width = window.innerWidth;
-        canvas.height = window.innerHeight;
-        let particles = [];
-
-        class Particle {
-            constructor() {
-                this.x = Math.random() * canvas.width;
-                this.y = Math.random() * canvas.height;
-                this.size = Math.random() * 2;
-                this.speedX = Math.random() * 0.5 - 0.25;
-                this.speedY = Math.random() * 0.5 - 0.25;
-            }
-            update() {
-                this.x += this.speedX;
-                this.y += this.speedY;
-            }
-            draw() {
-                ctx.fillStyle = 'rgba(79, 70, 229, 0.2)';
-                ctx.beginPath();
-                ctx.arc(this.x, this.y, this.size, 0, Math.PI * 2);
-                ctx.fill();
-            }
-        }
-
-        function init() {
-            for (let i = 0; i < 100; i++) particles.push(new Particle());
-        }
-
-        function animate() {
-            ctx.clearRect(0, 0, canvas.width, canvas.height);
-            particles.forEach(p => { p.update(); p.draw(); });
-            requestAnimationFrame(animate);
-        }
-        init(); animate();
     </script>
 </body>
 </html>
